@@ -82,17 +82,16 @@ function moveLeft() {
     }
 }
 function jump() {
-    //
+    if (hitboxCheck('top')) {
+        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + blocks[colId]['bottom'] - 31 + ' ' + colId);
+        player.style.bottom = blocks[colId]['bottom'] - 31 + 'px';
+        console.log (getBottom('player') + 'now');
+        ysp = 0;
+        //console.log(getBottom() + 'rtt' + blocks[colId]['bottom']);
+    }
+
     if (hitboxCheck('bottom')) {
         var colBottom = colId;
-        if (hitboxCheck('top')) {
-        } else {
-            console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + blocks[colId]['bottom'] - 31 + ' ' + colId);
-            player.style.bottom = blocks[colId]['bottom'] - 31 + 'px';
-            console.log (getBottom('player') + 'now');
-            ysp = 0;
-            //console.log(getBottom() + 'rtt' + blocks[colId]['bottom']);
-        }
         player.style.bottom = blocks[colBottom]['top'] + 'px';
         if (buttons[32]) {
             ysp = 5.5;
