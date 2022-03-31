@@ -1,0 +1,28 @@
+    .field {
+        position: relative;
+        width: 1000px;
+        height: 500px;
+        color: gray;
+        background-color: gray;
+        z-index: 1;
+        border-width: none;
+        }
+    .player {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: green;
+        color: green;
+        display: block;
+        z-index: 3;
+        border: none;
+        }
+    .block {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        color: blue;
+        background-color: blue;
+        z-index: 2;
+        border: none;
+        }

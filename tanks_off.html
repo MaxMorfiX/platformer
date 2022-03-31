@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<link rel="icon" href="tanks_off/3.png">-->
+        <title>tanks_off 1.0</title>
+        <style>
+            .field {
+                position: relative;
+                width:  950px;
+                height: 630px;
+                background-color: #00ffff;
+                margin: 30px;
+                display: none;
+                border-color: blueviolet;
+            }
+            .players_choose_button {
+                width: 100%;
+                height: 225px;
+                display: block
+            }
+            .player {
+                position: absolute;
+                width: 35px;
+                height: 35px;
+                display: none;
+                background-position: center !important;
+                background-repeat: no-repeat !important;
+            }
+
+            .bullet {
+                position: absolute;
+                top: 30px;
+                left: 30px;
+                width: 3px;
+                height: 8px;
+                background: url("tanks_off/bullet.png");
+            }
+
+            .bullet.left {
+                transform: rotate(-100grad);
+            }
+
+            .bullet.right {
+                transform: rotate(100grad);
+            }
+
+            .bullet.top {
+                transform: rotate(0grad);
+            }
+
+            .bullet.bottom {
+                transform: rotate(200grad);
+            }
+            .score_of_the_players {
+                margin-left: 30px;
+                margin-top: 5px;
+                display: none;
+                font-size: 20px;
+                padding: 10px;
+                width: 30px;
+            }
+            #score_player1 {
+                background-color: #3d46cd;
+                color: white;
+            }
+            #score_player2 {
+                background-color: #1db34a;
+            }
+            #score_player3 {
+                background-color: #fff200;
+            }
+            #score_player4 {
+                background-color: #ee161f;
+            }
+            .controles_of_the_players {
+                display: none;
+                margin: 10px 0px 0px 30px;
+            }
+            .inline_block {
+                display: inline-block;
+            }
+            .controls_block { width: 300px; }
+            .field_block { width: 975px; }
+            #win_window {
+                color: black;
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div>
+            <input id="players_choose_button_2" class="players_choose_button" type="button" value="2 players" style="background-color:greenyellow" onclick="add_a_chooser_of_max_score(2);" >
+            <input id="players_choose_button_3" class="players_choose_button" type="button" value="3 players" style="background-color:yellow"      onclick="add_a_chooser_of_max_score(3);" >
+            <input id="players_choose_button_4" class="players_choose_button" type="button" value="4 players" style="background-color:red"         onclick="add_a_chooser_of_max_score(4);" >
+        </div>
+
+        <div id="input_max_number_block" style="text-align: center; display: none; margin-top: 50px;">
+            <input id ='max_score_choose_window' type="number"
+                   placeholder="please whrite how many points do you want to play (from 1 to 999)"
+                   style="font-size: 20px; width: 700px; height: 30px; padding: 5px 10px; margin-bottom: 10px;"
+                   />
+            <input id = "button_ok" type="button" value="ok" onclick="choose_max_score();" style="width: 100px; height: 44px;"/>
+            <input id = "mode_of_the_game_win" type="button" value="by max score" onclick="change_game_win();" style="width: 100px; height: 44px;"/>
+        </div>
+
+
+        <div class ="inline_block field_block" >
+            <div id="field" class="field">
+
+                <div id="player1" class="player">
+                </div>
+
+                <div id="player2" class="player">
+                </div>
+
+                <div id="player3" class="player">
+                </div>
+
+                <div id="player4" class="player">
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div id = "win_window">
+            player <br>
+            win!!!
+        </div>
+
+        <div id = "controls_block" class ="inline_block controls_block">
+
+            <div id="score_player1" class="score_of_the_players">0</div>
+            <div id="control_of_the_player1" class="controles_of_the_players">
+                Player 1: <br>
+                right: RIGHT<br>
+                left: LEFT<br>
+                down: DOWN<br>
+                up: UP<br>
+                shot: / ?<br>
+            </div>
+            <div id="score_player2" class="score_of_the_players">0</div>
+            <div id="control_of_the_player2" class="controles_of_the_players">
+                Player 2:<br>
+                right: D<br>
+                left: A<br>
+                down: S<br>
+                up: W<br>
+                shot: 1<br>
+            </div>
+            <div id="score_player3" class="score_of_the_players">0</div>
+            <div id="control_of_the_player3" class="controles_of_the_players">
+                Player 3: <br>
+                right: NUMLOCK 3<br>
+                left: NUMLOCK 1<br>
+                down: NUMLOCK 2<br>
+                up: NUMLOCK 5<br>
+                shot: NUMLOCK ENTER<br>
+            </div>
+            <div id="score_player4" class="score_of_the_players">0</div>
+            <div id="control_of_the_player4" class="controles_of_the_players">
+                Player 4: <br>
+                right: L<br>
+                left: J<br>
+                down: K<br>
+                up: I<br>
+                shot: SPASE<br>
+            </div>
+
+        </div>
+
+
+        <script>
+            var game_win = false;
+            var players = 0;
+            var keys = {};
+            var tanks = {};
+            var bullets = [];
+            var max_score = 20;
+            var mode_of_the_max_number = "by max score";
+            var winner = "player";
+            var number_score_of_the_winner = 0;
+
+
+            var key_mapping = {
+                191: {player_name: 'player1', action: 'bullet'},
+                37: {player_name: 'player1', action: 'left'},
+                39: {player_name: 'player1', action: 'right'},
+                38: {player_name: 'player1', action: 'top'},
+                40: {player_name: 'player1', action: 'bottom'},
+
+                49: {player_name: 'player2', action: 'bullet'},
+                65: {player_name: 'player2', action: 'left'},
+                68: {player_name: 'player2', action: 'right'},
+                87: {player_name: 'player2', action: 'top'},
+                83: {player_name: 'player2', action: 'bottom'},
+
+                32: {player_name: 'player4', action: 'bullet'},
+                74: {player_name: 'player4', action: 'left'},
+                76: {player_name: 'player4', action: 'right'},
+                73: {player_name: 'player4', action: 'top'},
+                75: {player_name: 'player4', action: 'bottom'},
+
+                13: {player_name: 'player3', action: 'bullet'},
+                97: {player_name: 'player3', action: 'left'},
+                99: {player_name: 'player3', action: 'right'},
+                101: {player_name: 'player3', action: 'top'},
+                98: {player_name: 'player3', action: 'bottom'}
+            };
+            function change_game_win() {
+                if (mode_of_the_max_number === "by max score") {
+                    mode_of_the_max_number = "by time";
+//                console.log("change_game_win true!");
+                    document.getElementById("max_score_choose_window").placeholder = "please whrite how many seconds do you want to play (from 1 to 999)";
+//                console.log(document.getElementById('mode_of_the_game_win').placeholder);
+                } else {
+                    mode_of_the_max_number = "by max score";
+                    document.getElementById("max_score_choose_window").placeholder = "please whrite how many points do you want to play (from 1 to 999)";
+                }
+                document.getElementById("mode_of_the_game_win").value = mode_of_the_max_number;
+            }
+
+            function is_there_a_winner() {
+                var score_player1 = document.getElementById("score_player1").innerHTML;
+                var score_player2 = document.getElementById("score_player2").innerHTML;
+                var score_player3 = document.getElementById("score_player3").innerHTML;
+                var score_player4 = document.getElementById("score_player4").innerHTML;
+                number_score_of_the_winner = 0;
+                var how_much_winners = 0;
+
+                number_score_of_the_winner = Math.max(parseInt(score_player1), parseInt(score_player2), parseInt(score_player3), parseInt(score_player4));
+
+                if (number_score_of_the_winner === score_player1) {
+                    how_much_winners = parseInt(how_much_winners) + 1;
+                }
+                if (number_score_of_the_winner === score_player2) {
+                    how_much_winners = parseInt(how_much_winners) + 1;
+                }
+                if (number_score_of_the_winner === score_player3) {
+                    how_much_winners = parseInt(how_much_winners) + 1;
+                }
+                if (number_score_of_the_winner === score_player4) {
+                    how_much_winners = parseInt(how_much_winners) + 1;
+                }
+                if (how_much_winners >= 2) {
+                    game_win = false;
+                } else {
+                    game_win = true;
+                }
+            }
+            function win_window() {
+                for (var i = 1; i <= 4; i++) {
+                    document.getElementById("control_of_the_player" + i).style = 'display: none';
+                }
+
+
+
+
+                if (mode_of_the_max_number === "by max score") {
+                    game_win = true;
+                    var player_name = tanks[winner].name;
+                    for (var i = 1; i <= 4; i++) {
+                        document.getElementById("control_of_the_player" + i).style = 'display: none';
+                    }
+                }
+
+
+
+
+                if (mode_of_the_max_number === "by time") {
+                    check_game_win();
+                    function check_game_win() {
+                        is_there_a_winner();
+                        if (game_win === true) {
+                            console.log("IF game win is true");
+                            document.getElementById("field").style = 'display: none';
+                            var player_name = "";
+                            var score_player1 = document.getElementById("score_player1").innerHTML;
+                            var score_player2 = document.getElementById("score_player2").innerHTML;
+                            var score_player3 = document.getElementById("score_player3").innerHTML;
+                            var score_player4 = document.getElementById("score_player4").innerHTML;
+                            if (number_score_of_the_winner === parseInt(score_player1)) {
+                                console.log("1");
+                                player_name = "PLAYER 1";
+                            }
+                            if (number_score_of_the_winner === parseInt(score_player2)) {
+                                console.log("2");
+                                player_name = "PLAYER 2";
+                            }
+                            if (number_score_of_the_winner === parseInt(score_player3)) {
+                                console.log("3");
+                                player_name = "PLAYER 3";
+                            }
+                            if (number_score_of_the_winner === parseInt(score_player4)) {
+                                console.log("4");
+                                player_name = "PLAYER 4";
+                            }
+                            console.log("8989898609");
+                            document.getElementById("win_window").innerHTML = player_name + '<br> WIN!!!';
+                            document.getElementById("win_window").style = 'display: block';
+                        } else {
+//                            alert("a new 5 seconds!");
+                            console.log("IF game win is false");
+                            setTimeout(check_game_win, 20000);
+                        }
+                    }
+                }
+            }
+            function add_a_chooser_of_max_score(for_start_game) {
+                for (var i = 2; i <= 4; i++) {
+                    document.getElementById("players_choose_button_" + i).style = "display: none";
+                }
+                document.getElementById('input_max_number_block').style.display = "block";
+                var number_input = document.getElementById('max_score_choose_window');
+                number_input.focus();
+                number_input.addEventListener("keyup", function (event) {
+
+                    if (event.key === "Enter") {
+                        choose_max_score();
+                    }
+                });
+
+                players = for_start_game;
+            }
+            function choose_max_score() {
+                var value = document.getElementById('max_score_choose_window').value;
+                if (value < 1000 && value > 0) {
+                    max_score = value;
+                }
+                start_game();
+            }
+            function place_bullet_near_barrel(player_name, bullet) {
+                var tank = tanks[player_name].tank;
+                var tanks_pos_left = tank.offsetLeft;
+                var tanks_pos_top = tank.offsetTop;
+                var current_rotation = tanks[player_name].rotation;
+
+                if (current_rotation === "left") {
+                    bullet.style.top = (tanks_pos_top + 12.5) + "px";
+                    bullet.style.left = (tanks_pos_left) + "px";
+                }
+
+                if (current_rotation === "right") {
+                    bullet.style.top = (tanks_pos_top + 12.5) + "px";
+                    bullet.style.left = (tanks_pos_left) + "px";
+                }
+
+                if (current_rotation === "top") {
+                    bullet.style.top = (tanks_pos_top) + "px";
+                    bullet.style.left = (tanks_pos_left + 17.5) + "px";
+                }
+
+                if (current_rotation === "bottom") {
+                    bullet.style.top = (tanks_pos_top) + "px";
+                    bullet.style.left = (tanks_pos_left + 17.5) + "px";
+                }
+            }
+
+
+            function add_bullet(player_name) {
+
+                var bullet = document.createElement("div");
+                bullet.classList.add("bullet");
+                bullet.classList.add(tanks[player_name].rotation);
+                place_bullet_near_barrel(player_name, bullet);
+                document.getElementById("field").appendChild(bullet);
+                bullets.push({bullet: bullet, rotation: tanks[player_name].rotation, owner: player_name});
+            }
+
+            function set_key_pressed(code, pressed) {
+                if (keys[code] === "ignore_keydown" && pressed) {
+                    return;
+                }
+                keys[code] = pressed;
+//                console.log(keys);
+            }
+
+            document.onkeydown = function (event) {
+                set_key_pressed(event.keyCode, true);
+            };
+
+            document.onkeyup = function (event) {
+                set_key_pressed(event.keyCode, false);
+            };
+
+            function start_game() {
+                document.getElementById("input_max_number_block").style = "display: none";
+                document.getElementById("field").style = "display: block";
+                console.log("���� �������� � " + players + " ��������");
+                console.log(max_score);
+
+                for (var i = 1; i <= players; i++) {
+                    var tank = document.getElementById("player" + i);
+                    var score_players = document.getElementById("score_player" + i);
+                    tank.style = `background:url("tanks_off/${i}.png"); display: block`;
+                    score_players.style = 'display: block';
+                }
+
+                for (var i = 1; i <= 4; i++) {
+                    var player_id = "player" + i;
+                    tanks[player_id] = {tank: document.getElementById(player_id), rotation: "top", name: "PLAYER " + i};
+                }
+
+                for (var i = 1; i <= players; i++) {
+                    document.getElementById("control_of_the_player" + i).style = "display: block";
+                }
+                document.getElementById("player1").style.right = '0px';
+                document.getElementById("player2").style.bottom = '0px';
+                document.getElementById("player4").style.right = "0px";
+                document.getElementById("player4").style.bottom = "0px";
+                if (mode_of_the_max_number === "by time") {
+                    setTimeout(win_window, max_score * 1000);
+                }
+                handle_pressed_keys();
+                move_bullets();
+            }
+
+//            start_game(4); // temp while developing
+
+            function check_wall_collision(curr_bullet) {
+                var positionX = curr_bullet.bullet.offsetLeft;
+                var positionY = curr_bullet.bullet.offsetTop;
+                if (positionX <= 0) {
+//                    console.log("left BUM!");
+                    curr_bullet.to_delete = true;
+                }
+                if (positionX >= 950) {
+//                    console.log("right BUM!");
+                    curr_bullet.to_delete = true;
+                }
+                if (positionY <= 0) {
+//                    console.log("top BUM!");
+                    curr_bullet.to_delete = true;
+                }
+                if (positionY >= 630) {
+//                    console.log("bottom BUM!");
+                    curr_bullet.to_delete = true;
+                }
+
+            }
+            function check_tanks_collisions(bullet) {
+                for (var index in tanks) {
+                    if (bullet.owner === tanks[index].tank.id) {
+                        continue;
+                    }
+
+//                    console.log(33);
+                    var f_ok = check_one_tank_collision(bullet, tanks[index], bullet.owner);
+                    if (!f_ok) {
+                        bullet.to_delete = true;
+//                        console.log('Tank bum!');
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function check_one_tank_collision(bullet, tank, owner) {
+                var tank_left = tank.tank.offsetLeft;
+                var tank_right = tank_left + 35;
+                var tank_top = tank.tank.offsetTop;
+                var tank_bottom = tank_top + 35;
+                var bullet_positionX = bullet.bullet.offsetLeft;
+                var bullet_positionY = bullet.bullet.offsetTop;
+//                console.log(`tank: left - ${tank_left}, top - ${tank_top}, BULLET: x - ${bullet_positionX}, y - ${bullet_positionY}, `);
+
+                if (bullet_positionX >= tank_left) {
+                    if (bullet_positionX <= tank_right) {
+                        if (bullet_positionY >= tank_top) {
+                            if (bullet_positionY <= tank_bottom) {
+
+                                var count_owner = document.getElementById('score_' + owner).textContent;
+                                count_owner = parseInt(count_owner) + 1;
+                                document.getElementById('score_' + owner).innerHTML = count_owner;
+                                if (mode_of_the_max_number === "by max score") {
+                                    if (count_owner >= max_score) {
+                                        winner = owner;
+                                        win_window();
+                                    }
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            function move_bullets() {
+                const TIMEOUT_BETWEEN_HANDLING_BULLETS = 10;
+                const BULLET_SPEED = 15;
+
+                for (var i = bullets.length - 1; i >= 0; i--) {
+                    var curr_bullet = bullets[i];
+                    if (curr_bullet.to_delete) {
+                        curr_bullet.bullet.parentNode.removeChild(curr_bullet.bullet);
+                        bullets.splice(i, 1);
+                        continue;
+                    }
+
+                    var dx = 0;
+                    var dy = 0;
+                    if (curr_bullet.rotation === "left") {
+                        dx = -BULLET_SPEED;
+                    }
+                    if (curr_bullet.rotation === "right") {
+                        dx = +BULLET_SPEED;
+                    }
+                    if (curr_bullet.rotation === "top") {
+                        dy = -BULLET_SPEED;
+                    }
+                    if (curr_bullet.rotation === "bottom") {
+                        dy = +BULLET_SPEED;
+                    }
+
+                    curr_bullet.bullet.style.left = (curr_bullet.bullet.offsetLeft + dx) + "px";
+                    curr_bullet.bullet.style.top = (curr_bullet.bullet.offsetTop + dy) + "px";
+                    check_wall_collision(curr_bullet);
+                    check_tanks_collisions(curr_bullet);
+                }
+
+                if (!game_win) {
+                    setTimeout(move_bullets, TIMEOUT_BETWEEN_HANDLING_BULLETS);
+                }
+            }
+
+
+            function handle_pressed_keys() {
+                const TIMEOUT_BETWEEN_HANDLING = 10;
+                var step = 2;
+//                console.log(posLeft);
+//                console.log(posTop);
+                //alert(posLeft + ' ' + posTop);
+
+
+                for (var index in keys) {
+                    if (!keys[index] || keys[index] === "ignore_keydown") {
+                        continue;
+                    }
+
+                    if (!key_mapping[index]) {
+                        continue;
+                    }
+
+                    var key_data = key_mapping[index];
+                    switch (key_data.action) {
+                        case "bullet":
+                            keys[index] = "ignore_keydown";
+                            add_bullet(key_data.player_name);
+                            break;
+                        case "left":
+                            move_left(key_data.player_name);
+                            break;
+                        case "right":
+                            move_right(key_data.player_name);
+                            break;
+                        case "top":
+                            move_top(key_data.player_name);
+                            break;
+                        case "bottom":
+                            move_bottom(key_data.player_name);
+                            break;
+                    }
+
+                }
+
+                function move_right(player_name) {
+                    var posLeft = document.getElementById(player_name).offsetLeft;
+                    document.getElementById(player_name).style.transform = "rotate(100grad)";
+                    tanks[player_name].rotation = "right";
+                    if (posLeft < 915) {
+                        document.getElementById(player_name).style.left = (posLeft + step) + "px";
+                    }
+                }
+
+                function move_left(player_name) {
+                    var posLeft = document.getElementById(player_name).offsetLeft;
+                    document.getElementById(player_name).style.transform = "rotate(300grad)";
+                    tanks[player_name].rotation = "left";
+                    if (posLeft > 0) {
+//                        console.log(posLeft - step);
+                        document.getElementById(player_name).style.left = (posLeft - step) + "px";
+//                        console.log(document.getElementById(player_name).offsetLeft);
+//                        console.log(document.getElementById(player_name).style.left);
+//                        document.getElementById('player1').style.right = 'auto';
+                    }
+                }
+
+                function move_top(player_name) {
+                    var posTop = document.getElementById(player_name).offsetTop;
+                    document.getElementById(player_name).style.transform = "rotate(0grad)";
+                    tanks[player_name].rotation = "top";
+                    if (posTop > 0) {
+                        document.getElementById(player_name).style.top = (posTop - step) + "px";
+                    }
+                }
+
+                function move_bottom(player_name) {
+                    var posTop = document.getElementById(player_name).offsetTop;
+                    document.getElementById(player_name).style.transform = "rotate(200grad)";
+                    tanks[player_name].rotation = "bottom";
+                    if (posTop < 595) {
+                        document.getElementById(player_name).style.top = (posTop + step) + "px";
+                    }
+                }
+                if (!game_win) {
+                    setTimeout(handle_pressed_keys, TIMEOUT_BETWEEN_HANDLING);
+                }
+            }
+        </script>
+
+    </body>
+</html>
