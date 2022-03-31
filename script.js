@@ -55,7 +55,11 @@ function KeyUp(e) {
 }
 
 function cycle() {
-    jump();
+    var isAtBottom = handleY();
+
+    if (isAtBottom && buttons[BTN_SPACE]) {
+        ysp = 5.5;
+    }
     
     if (buttons[BTN_LEFT]) {
         moveLeft();
@@ -88,7 +92,8 @@ function moveLeft() {
     var posLeft = player.offsetLeft;
     player.style.left = (posLeft - xsp) + "px";
 }
-function jump() {
+
+function handleY() {
 //    if (hitboxCheck('top')) {
 //        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + blocks[colId]['bottom'] - 31 + ' ' + colId);
 //        player.style.bottom = blocks[colId]['bottom'] - 31 + 'px';
@@ -102,14 +107,15 @@ function jump() {
         ysp = ysp - 0.5;
     }
 
-    if (hitboxCheck('bottom')) {
+    var isAtBottom = hitboxCheck('bottom');
+
+    if (isAtBottom) {
         player.style.bottom = blocks[colId]['top'] + 'px';
-        
         ysp = 0;
-        if (buttons[BTN_SPACE]) {
-            ysp = 5.5;
-        }
+        return true;
     }
+
+    return false;
 }
 function hitboxCheck (orientation) {
     var left = player.offsetLeft;
