@@ -21,7 +21,7 @@ function addHitbox (count) {
     for (var i=1; i <= count; i++) {
 //        console.log (i);
         var currBlock = {};
-        var x = document.getElementById("block" + i).offsetLeft
+        var x = document.getElementById("block" + i).offsetLeft;
         var y = getBottom('block' + i);
 //        console.log (x + y);u
         currBlock['left'] = x - 1;
@@ -53,10 +53,10 @@ setTimeout (cycle, 1000);
 function cycle () {
     jump();
     
-    if (buttons ['37'] == true) {
+    if (buttons['37']) {
         moveLeft ();
     }
-    if (buttons ['39'] == true) {
+    if (buttons['39']) {
         moveRight ();
     }
     
@@ -112,7 +112,7 @@ function hitboxCheck (orientation) {
     var top = getBottom('player') + blockSize;
     
     
-    if (orientation == 'left') {
+    if (orientation === 'left') {
         for(i = 1; i <= blocksCount; i++) {
             if (left >= blocks[i]['left'] + 25) {
                 if (left <= blocks[i]['right']) {
@@ -127,7 +127,7 @@ function hitboxCheck (orientation) {
             }
         }
     }
-    if (orientation == 'right') {
+    if (orientation === 'right') {
         for (i = 1; i <= blocksCount; i++) {
             if (right >= blocks[i]['left']) {
                 if (right <= blocks[i]['right'] - 25) {
@@ -141,7 +141,7 @@ function hitboxCheck (orientation) {
             }
         }
     }
-    if (orientation == 'top') {
+    if (orientation === 'top') {
         for (i = 1; i <= blocksCount; i++) {
             if (right > blocks[i]['left']) {
                 if (left < blocks[i]['right']) {
@@ -155,7 +155,7 @@ function hitboxCheck (orientation) {
             }
         }
     }
-    if (orientation == 'bottom') {
+    if (orientation === 'bottom') {
         for (i = 1; i <= blocksCount; i++) {
             if (right > blocks[i]['left'] + 1) {
                 if (left < blocks[i]['right'] - 1) {
