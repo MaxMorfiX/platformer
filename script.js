@@ -81,6 +81,7 @@ function moveLeft() {
     }
 }
 function jump() {
+    //
     if (hitboxCheck('bottom')) {
         var colBottom = colId;
         if (hitboxCheck('top')) {
