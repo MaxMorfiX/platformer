@@ -94,13 +94,15 @@ function moveLeft() {
 }
 
 function handleY() {
-//    if (hitboxCheck('top')) {
-//        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + blocks[colId]['bottom'] - 31 + ' ' + colId);
-//        player.style.bottom = blocks[colId]['bottom'] - 31 + 'px';
-//        console.log (getBottom('player') + 'now');
-//        ysp = 0;
-//        //console.log(getBottom() + 'rtt' + blocks[colId]['bottom']);
-//    }
+
+
+    if (hitboxCheck('top')) {
+        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + (blocks[colId]['bottom'] - blockSize - 1) + ' ' + colId);
+        player.style.bottom = blocks[colId]['bottom'] - blockSize - 1 + 'px';
+        console.log (getBottom('player') + 'now');
+        ysp = 0;
+        //console.log(getBottom() + 'rtt' + blocks[colId]['bottom']);
+    }
 
     if (ysp > -7) {
 //            console.log("-1");
@@ -155,8 +157,8 @@ function hitboxCheck (orientation) {
     }
     if (orientation === 'top') {
         for (i = 1; i <= blocksCount; i++) {
-            if (right > blocks[i]['left']) {
-                if (left < blocks[i]['right']) {
+            if (right > blocks[i]['left'] + 1) {
+                if (left < blocks[i]['right'] - 1) {
                     if (top >= blocks[i]['bottom']) {
                         if (top <= blocks[i]['top']) {
                             colId = i;
@@ -171,7 +173,7 @@ function hitboxCheck (orientation) {
         for (i = 1; i <= blocksCount; i++) {
             if (right > blocks[i]['left'] + 1) {
                 if (left < blocks[i]['right'] - 1) {
-                    if (bottom >= blocks[i]['bottom'] + 25) {
+                    if (bottom >= blocks[i]['bottom']) {
                         if (bottom <= blocks[i]['top']) {
                             colId = i;
                             return true;
