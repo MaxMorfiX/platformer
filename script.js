@@ -9,15 +9,18 @@ var blocksCountNotField = 27;
 var blocksCount = blocksCountNotField + 1;
 var colId;
 
+var player = document.getElementById('player');
+
 document.addEventListener ('keydown', KeyDown);
 document.addEventListener ('keyup', KeyUp);
 addHitbox (blocksCountNotField);
+setTimeout (cycle, 1000);
 
 function getBottom(id) {
 //    console.log("getbottom from " + id)
     return document.getElementById('field').offsetHeight - document.getElementById(id).offsetTop - blockSize;
 }
-function addHitbox (count) {
+function addHitbox(count) {
     for (var i=1; i <= count; i++) {
 //        console.log (i);
         var currBlock = {};
@@ -48,8 +51,6 @@ function KeyUp(e) {
 //    console.log (buttons);
 }
 
-setTimeout (cycle, 1000);
-
 function cycle () {
     jump();
     
@@ -62,7 +63,7 @@ function cycle () {
     
     yp = getBottom('player');
 //    console.log (yp + " " + ysp);
-    document.getElementById('player').style.bottom = (yp + ysp + 'px');
+    player.style.bottom = (yp + ysp + 'px');
     setTimeout (cycle, gamespeed);
 }
 
@@ -70,14 +71,14 @@ function cycle () {
 
 function moveRight() {
     if (hitboxCheck('right')) {} else {
-        var posLeft = document.getElementById('player').offsetLeft;
-        document.getElementById('player').style.left = (posLeft + xsp) + "px";
+        var posLeft = player.offsetLeft;
+        player.style.left = (posLeft + xsp) + "px";
     }
 }
 function moveLeft() {
     if(hitboxCheck('left')) {} else {
-        var posLeft = document.getElementById('player').offsetLeft;
-        document.getElementById('player').style.left = (posLeft - xsp) + "px";
+        var posLeft = player.offsetLeft;
+        player.style.left = (posLeft - xsp) + "px";
     }
 }
 function jump() {
@@ -87,12 +88,12 @@ function jump() {
         if (hitboxCheck('top')) {
         } else {
             console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + blocks[colId]['bottom'] - 31 + ' ' + colId);
-            document.getElementById('player').style.bottom = blocks[colId]['bottom'] - 31 + 'px';
+            player.style.bottom = blocks[colId]['bottom'] - 31 + 'px';
             console.log (getBottom('player') + 'now');
             ysp = 0;
             //console.log(getBottom() + 'rtt' + blocks[colId]['bottom']);
         }
-        document.getElementById('player').style.bottom = blocks[colBottom]['top'] + 'px';
+        player.style.bottom = blocks[colBottom]['top'] + 'px';
         if (buttons[32]) {
             ysp = 5.5;
         } else {
@@ -106,10 +107,10 @@ function jump() {
     }
 }
 function hitboxCheck (orientation) {
-    var left = document.getElementById('player').offsetLeft;
+    var left = player.offsetLeft;
     var bottom = getBottom('player');
-    var right = document.getElementById('player').offsetLeft + blockSize;
-    var top = getBottom('player') + blockSize;
+    var right = left + blockSize;
+    var top = bottom + blockSize;
     
     
     if (orientation === 'left') {
