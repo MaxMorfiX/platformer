@@ -15,6 +15,19 @@ const BTN_RIGHT = 39;
 
 var map_blocks = [
     {bottom: 50, left: 100, color: 'red'},
+    /*
+    {bottom: 50, left: 300, color: 'red'},
+    {bottom: 50, left: 100, color: 'red'},
+    {bottom: 50, left: 200, color: 'red'},
+    {bottom: 50, left: 300, color: 'red'},
+    {bottom: 90, left: 400, color: 'red'},
+    {bottom: 90, left: 200, color: 'red'},
+    {bottom: 90, left: 300, color: 'red'},
+    {bottom: 90, left: 400, color: 'red'},
+    {bottom: 130, left: 500, color: 'red'},
+    {bottom: 130, left: 300, color: 'red'},
+    {bottom: 130, left: 200, color: 'green'}
+     */
 ];
 
 var player = document.getElementById('player');
@@ -22,7 +35,8 @@ var player = document.getElementById('player');
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
 create_blocks_from_json();
-addBlockHitbox(blocksCount);
+//addBlockHitbox(blocksCount);
+addBlockHitboxJquery();
 addObstacleHitbox(obstCount);
 addFieldHitbox();
 setTimeout(cycle, 1000);
@@ -82,6 +96,28 @@ function addBlockHitbox(count) {
     }
     console.log (blocks)
 }
+
+function addBlockHitboxJquery() {
+    var i = 1;
+    $(".block").each(function() {
+    //        console.log (i);
+        var block = this;
+        var currBlock = {};
+        var x = block.offsetLeft;
+        var y = getBottom(block.id);
+    //        console.log (x + y);u
+        currBlock['left'] = x - 1;
+        currBlock['right'] = x + blockSize + 1;
+        currBlock['top'] = y + blockSize;
+        currBlock['bottom'] = y;
+        blocks[i] = currBlock;
+        i++;
+    });
+    console.log (blocks)
+    blocksCount = $(".block").length;
+    console.log(JSON.stringify(blocksCount));
+}
+
 function addObstacleHitbox(count) {
     for (var i=1; i <= count; i++) {
 //        console.log (i);
@@ -263,11 +299,13 @@ function hitboxCheck (orientation) {
 
 function create_blocks_from_json() {
     var container = $("#field");
+    var k = 50;
     for (var i=0; i < map_blocks.length; i++) {
         var block = map_blocks[i];
-        var html = `<div id="auto_block_${i}" class="block" style="left: ${block.left}px; bottom: ${block.bottom}px;  background-color: ${block.color}">`;
+        var html = `<div id="block${k}" class="block" style="left: ${block.left}px; bottom: ${block.bottom}px;  background-color: ${block.color}">`;
         var new_block = $(html);
         container.append(new_block);
+        k++;
         
 
     }
