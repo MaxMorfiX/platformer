@@ -6,8 +6,7 @@ var xsp = 5;
 var blocks = {};
 var obst = {};
 var yp;
-var blocksCountNotField = 27;
-var blocksCount = blocksCountNotField + 1;
+var blocksCount = 27;
 var obstCount = 4;
 var colId;
 const BTN_SPACE = 32;
@@ -16,15 +15,52 @@ const BTN_RIGHT = 39;
 
 var player = document.getElementById('player');
 
-document.addEventListener ('keydown', KeyDown);
-document.addEventListener ('keyup', KeyUp);
-addBlockHitbox (blocksCountNotField);
-addObstacleHitbox (obstCount);
-setTimeout (cycle, 1000);
+document.addEventListener('keydown', KeyDown);
+document.addEventListener('keyup', KeyUp);
+addBlockHitbox(blocksCount);
+addObstacleHitbox(obstCount);
+addFieldHitbox();
+setTimeout(cycle, 1000);
 
 function getBottom(id) {
 //    console.log("getbottom from " + id)
     return document.getElementById('field').offsetHeight - document.getElementById(id).offsetTop - blockSize;
+}
+function addFieldHitbox() {
+    var top = {};
+    var bottom = {};
+    var left = {};
+    var right = {};
+    
+    bottom['left'] = 0;
+    bottom['right'] = document.getElementById('field').offsetWidth;
+    bottom['top'] = 0;
+    bottom['bottom'] = -100;
+    blocks[blocksCount + 1] = bottom;
+    blocksCount = blocksCount + 1;
+    
+    top['left'] = 0;
+    top['right'] = document.getElementById('field').offsetWidth;
+    top['bottom'] = document.getElementById('field').offsetHeight;
+    top['top'] = top['bottom'] + 100;
+    blocks[blocksCount + 1] = top;
+    blocksCount = blocksCount + 1;
+    
+    left['left'] = -100;
+    left['right'] = 0;
+    left['bottom'] = 0;
+    left['top'] = document.getElementById('field').offsetHeight;
+    blocks[blocksCount + 1] = left;
+    blocksCount = blocksCount + 1;
+    
+    right['left'] = document.getElementById('field').offsetWidth;
+    right['right'] = right['left'] + 100;
+    right['bottom'] = 0;
+    right['top'] = document.getElementById('field').offsetHeight;
+    blocks[blocksCount + 1] = right;
+    blocksCount = blocksCount + 1;
+    
+    console.log (blocks);
 }
 function addBlockHitbox(count) {
     for (var i=1; i <= count; i++) {
@@ -39,12 +75,6 @@ function addBlockHitbox(count) {
         currBlock['bottom'] = y;
         blocks[i] = currBlock;
     }
-    var fieldBottom = {};
-    fieldBottom['left'] = 0;
-    fieldBottom['right'] = document.getElementById('field').offsetWidth;
-    fieldBottom['top'] = 0;
-    fieldBottom['bottom'] = -100;
-    blocks[blocksCount] = fieldBottom;
     console.log (blocks)
 }
 function addObstacleHitbox(count) {
@@ -125,14 +155,14 @@ function handleY() {
 
 
     if (hitboxCheck('top')) {
-        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + (blocks[colId]['bottom'] - blockSize - 1) + ' ' + colId);
+//        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + (blocks[colId]['bottom'] - blockSize - 1) + ' ' + colId);
         player.style.bottom = blocks[colId]['bottom'] - blockSize - 1 + 'px';
-        console.log (getBottom('player') + 'now');
+//        console.log (getBottom('player') + 'now');
         ysp = 0;
         //console.log(getBottom() + 'rtt' + blocks[colId]['bottom']);
     }
 
-    if (ysp > -7) {
+    if (ysp > -5.5) {
 //            console.log("-1");
         ysp = ysp - 0.5;
     }
@@ -213,10 +243,10 @@ function hitboxCheck (orientation) {
     }
     if (orientation === 'bad') {
         for (i = 1; i <= obstCount; i++) {
+//            console.log ('check bad' + i);
             if (right > obst[i]['left'] + 1) {
                 if (left < obst[i]['right'] - 1) {
                     if (top >= obst[i]['bottom']) {
-        console.log ('boo')
                         if (bottom <= obst[i]['top']) {
                             return true;
                         }
