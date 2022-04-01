@@ -37,7 +37,7 @@ document.addEventListener('keyup', KeyUp);
 create_blocks_from_json();
 //addBlockHitbox(blocksCount);
 addBlockHitboxJquery();
-addObstacleHitbox(obstCount);
+//addObstacleHitbox(obstCount);
 addFieldHitbox();
 setTimeout(cycle, 1000);
 
@@ -98,22 +98,26 @@ function addBlockHitbox(count) {
 }
 
 function addBlockHitboxJquery() {
-    var i = 1;
-    $(".block").each(function() {
-    //        console.log (i);
+    var i_blocks = 1;
+    var i_obst = 1;
+    $(".block, .obstacle").each(function() {
         var block = this;
         var currBlock = {};
         var x = block.offsetLeft;
         var y = getBottom(block.id);
-    //        console.log (x + y);u
         currBlock['left'] = x - 1;
         currBlock['right'] = x + blockSize + 1;
         currBlock['top'] = y + blockSize;
         currBlock['bottom'] = y;
-        blocks[i] = currBlock;
-        i++;
+
+        if ($(this).hasClass('block')) {
+            blocks[i_blocks] = currBlock;
+            i_blocks++;
+        } else {
+            obst[i_obst] = currBlock;
+            i_obst++;
+        }
     });
-    console.log (blocks)
     blocksCount = $(".block").length;
     console.log(JSON.stringify(blocksCount));
 }
