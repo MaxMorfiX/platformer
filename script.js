@@ -104,7 +104,7 @@ function KeyUp(e) {
 function cycle() {
     var isAtBottom = handleY();
     if (isAtBottom && buttons[BTN_SPACE]) {
-        ysp = 5.5;
+        ysp = 7;
     }
     
     if (buttons[BTN_LEFT]) {

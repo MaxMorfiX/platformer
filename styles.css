@@ -38,3 +38,13 @@
         border: none;
         background: url('textures/obst.png');
         }
+    .blockNet {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        color: black;
+        background-color: purple;
+        z-index: 2;
+        border: none;
+        background: url('textures/blockNet.png');
+        }
