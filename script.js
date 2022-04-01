@@ -123,8 +123,6 @@ function cycle() {
     }
 }
 
-
-
 function moveRight() {
     if (hitboxCheck('right')) {
         return;
