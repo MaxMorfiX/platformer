@@ -4,9 +4,11 @@ var blockSize = 30;
 var ysp = 0.00;
 var xsp = 5;
 var blocks = {};
+var obst = {};
 var yp;
 var blocksCountNotField = 27;
 var blocksCount = blocksCountNotField + 1;
+var obstCount = 4;
 var colId;
 const BTN_SPACE = 32;
 const BTN_LEFT = 37;
@@ -16,14 +18,15 @@ var player = document.getElementById('player');
 
 document.addEventListener ('keydown', KeyDown);
 document.addEventListener ('keyup', KeyUp);
-addHitbox (blocksCountNotField);
+addBlockHitbox (blocksCountNotField);
+addObstacleHitbox (obstCount);
 setTimeout (cycle, 1000);
 
 function getBottom(id) {
 //    console.log("getbottom from " + id)
     return document.getElementById('field').offsetHeight - document.getElementById(id).offsetTop - blockSize;
 }
-function addHitbox(count) {
+function addBlockHitbox(count) {
     for (var i=1; i <= count; i++) {
 //        console.log (i);
         var currBlock = {};
@@ -44,7 +47,21 @@ function addHitbox(count) {
     blocks[blocksCount] = fieldBottom;
     console.log (blocks)
 }
-
+function addObstacleHitbox(count) {
+    for (var i=1; i <= count; i++) {
+//        console.log (i);
+        var currObst = {};
+        var x = document.getElementById("obst" + i).offsetLeft;
+        var y = getBottom('obst' + i);
+//        console.log (x + y);u
+        currObst['left'] = x;
+        currObst['right'] = x + blockSize;
+        currObst['top'] = y + blockSize; 
+        currObst['bottom'] = y;
+        obst[i] = currObst;
+    }
+    console.log (obst);
+}
 function KeyDown(e){
     buttons[e.which] = true;
 //   console.log (buttons);
@@ -56,7 +73,6 @@ function KeyUp(e) {
 
 function cycle() {
     var isAtBottom = handleY();
-
     if (isAtBottom && buttons[BTN_SPACE]) {
         ysp = 5.5;
     }
@@ -71,7 +87,10 @@ function cycle() {
     yp = getBottom('player');
 //    console.log (yp + " " + ysp);
     player.style.bottom = (yp + ysp + 'px');
+    
+    if (liveOrDie()) {} else {
     setTimeout (cycle, gamespeed);
+    }
 }
 
 
@@ -91,6 +110,15 @@ function moveLeft() {
 
     var posLeft = player.offsetLeft;
     player.style.left = (posLeft - xsp) + "px";
+}
+function liveOrDie() {
+    if (hitboxCheck('bad')) {
+        gameOver();
+        return true;
+    }
+}
+function gameOver() {
+    alert ('game over');
 }
 
 function handleY() {
@@ -176,6 +204,20 @@ function hitboxCheck (orientation) {
                     if (bottom >= blocks[i]['bottom']) {
                         if (bottom <= blocks[i]['top']) {
                             colId = i;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (orientation === 'bad') {
+        for (i = 1; i <= obstCount; i++) {
+            if (right > obst[i]['left'] + 1) {
+                if (left < obst[i]['right'] - 1) {
+                    if (top >= obst[i]['bottom']) {
+        console.log ('boo')
+                        if (bottom <= obst[i]['top']) {
                             return true;
                         }
                     }
