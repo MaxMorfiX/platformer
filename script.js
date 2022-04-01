@@ -13,10 +13,15 @@ const BTN_SPACE = 32;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
 
+var map_blocks = [
+    {bottom: 50, left: 100, color: 'red'},
+];
+
 var player = document.getElementById('player');
 
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
+create_blocks_from_json();
 addBlockHitbox(blocksCount);
 addObstacleHitbox(obstCount);
 addFieldHitbox();
@@ -253,4 +258,23 @@ function hitboxCheck (orientation) {
             }
         }
     }
+}
+
+
+function create_blocks_from_json() {
+    var container = $("#field");
+    for (var i=0; i < map_blocks.length; i++) {
+        var block = map_blocks[i];
+        var html = `<div id="auto_block_${i}" class="block" style="left: ${block.left}px; bottom: ${block.bottom}px;  background-color: ${block.color}">`;
+        var new_block = $(html);
+        container.append(new_block);
+        
+
+    }
+
+//    var t = setInterval(() => {
+//        var t = i;
+//        $(".block").toggle();
+//    }, 1000);
+
 }
