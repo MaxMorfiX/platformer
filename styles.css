@@ -38,6 +38,12 @@
     border: none;
     background: url('textures/obst.png');
 }
+.button {
+    position: absolute;
+    width: 100px;
+    height: 500px;
+    background-color: black;
+}
 .blockNet {
     position: absolute;
     width: 30px;

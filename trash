@@ -1,0 +1,41 @@
+    var t = setInterval(() => {
+        var t = i;
+        $(".block").toggle();
+    }, 1000);
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+function addBlockHitbox(count) {
+    for (var i=1; i <= count; i++) {
+//        console.log (i);
+        var currBlock = {};
+        var x = document.getElementById("block" + i).offsetLeft;
+        var y = getBottom('block' + i);
+//        console.log (x + y);u
+        currBlock['left'] = x - 1;
+        currBlock['right'] = x + blockSize + 1;
+        currBlock['top'] = y + blockSize; 
+        currBlock['bottom'] = y;
+        blocks[i] = currBlock;
+    }
+    console.log (blocks)
+}
+function addObstacleHitbox(count) {
+    for (var i=1; i <= count; i++) {
+//        console.log (i);
+        var currObst = {};
+        var x = document.getElementById("obst" + i).offsetLeft;
+        var y = getBottom('obst' + i);
+//        console.log (x + y);u
+        currObst['left'] = x;
+        currObst['right'] = x + blockSize;
+        currObst['top'] = y + blockSize; 
+        currObst['bottom'] = y;
+        obst[i] = currObst;
+    }
+    console.log (obst);
+}

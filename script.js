@@ -12,34 +12,36 @@ var colId;
 const BTN_SPACE = 32;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
-
-var map_blocks = [
-    {bottom: 50, left: 100, color: 'red'},
-    /*
-    {bottom: 50, left: 300, color: 'red'},
-    {bottom: 50, left: 100, color: 'red'},
-    {bottom: 50, left: 200, color: 'red'},
-    {bottom: 50, left: 300, color: 'red'},
-    {bottom: 90, left: 400, color: 'red'},
-    {bottom: 90, left: 200, color: 'red'},
-    {bottom: 90, left: 300, color: 'red'},
-    {bottom: 90, left: 400, color: 'red'},
-    {bottom: 130, left: 500, color: 'red'},
-    {bottom: 130, left: 300, color: 'red'},
-    {bottom: 130, left: 200, color: 'green'}
-     */
+var mapBlocks = [
+    {bottom: 80, left: 100},
+    {bottom: 50, left: 300},
+    {bottom: 120, left: 100},
+    {bottom: 50, left: 200},
+    {bottom: 50, left: 300},
+    {bottom: 90, left: 400},
+    {bottom: 90, left: 200},
+    {bottom: 90, left: 300},
+    {bottom: 90, left: 400,},
+    {bottom: 130, left: 500},
+    {bottom: 130, left: 300},
+    {bottom: 130, left: 200}
 ];
+var mapObst = [];
 
-var player = document.getElementById('player');
+//startGame()
+startCreate()
 
-document.addEventListener('keydown', KeyDown);
-document.addEventListener('keyup', KeyUp);
-create_blocks_from_json();
+function startGame() {
+    var player = document.getElementById('player');
+    document.addEventListener('keydown', KeyDown);
+    document.addEventListener('keyup', KeyUp);
+//    create_blocks_from_json();
+    addBlockHitboxJquery();
+    addFieldHitbox();
 //addBlockHitbox(blocksCount);
-addBlockHitboxJquery();
 //addObstacleHitbox(obstCount);
-addFieldHitbox();
-setTimeout(cycle, 1000);
+    setTimeout(cycle, 1000);
+}
 
 function getBottom(id) {
 //    console.log("getbottom from " + id)
@@ -81,21 +83,6 @@ function addFieldHitbox() {
     
     console.log (blocks);
 }
-function addBlockHitbox(count) {
-    for (var i=1; i <= count; i++) {
-//        console.log (i);
-        var currBlock = {};
-        var x = document.getElementById("block" + i).offsetLeft;
-        var y = getBottom('block' + i);
-//        console.log (x + y);u
-        currBlock['left'] = x - 1;
-        currBlock['right'] = x + blockSize + 1;
-        currBlock['top'] = y + blockSize; 
-        currBlock['bottom'] = y;
-        blocks[i] = currBlock;
-    }
-    console.log (blocks)
-}
 
 function addBlockHitboxJquery() {
     var i_blocks = 1;
@@ -122,21 +109,6 @@ function addBlockHitboxJquery() {
     console.log(JSON.stringify(blocksCount));
 }
 
-function addObstacleHitbox(count) {
-    for (var i=1; i <= count; i++) {
-//        console.log (i);
-        var currObst = {};
-        var x = document.getElementById("obst" + i).offsetLeft;
-        var y = getBottom('obst' + i);
-//        console.log (x + y);u
-        currObst['left'] = x;
-        currObst['right'] = x + blockSize;
-        currObst['top'] = y + blockSize; 
-        currObst['bottom'] = y;
-        obst[i] = currObst;
-    }
-    console.log (obst);
-}
 function KeyDown(e){
     buttons[e.which] = true;
 //   console.log (buttons);
@@ -163,8 +135,8 @@ function cycle() {
 //    console.log (yp + " " + ysp);
     player.style.bottom = (yp + ysp + 'px');
     
-    if (liveOrDie()) {} else {
     setTimeout (cycle, gamespeed);
+    if (liveOrDie()) {} else {
     }
 }
 
@@ -192,6 +164,8 @@ function liveOrDie() {
 }
 function gameOver() {
     alert ('game over');
+    document.getElementById('player').style.left = '235px';
+    document.getElementById('player').style.bottom = '250px';
 }
 
 function handleY() {
@@ -299,24 +273,41 @@ function hitboxCheck (orientation) {
         }
     }
 }
-
-
-function create_blocks_from_json() {
-    var container = $("#field");
-    var k = 50;
-    for (var i=0; i < map_blocks.length; i++) {
-        var block = map_blocks[i];
-        var html = `<div id="block${k}" class="block" style="left: ${block.left}px; bottom: ${block.bottom}px;  background-color: ${block.color}">`;
-        var new_block = $(html);
-        container.append(new_block);
-        k++;
-        
-
+function createObject(type, left, bottom) {
+    if (type === 'block') {
+        $("#field").append(`<div id="block${mapBlocks.length + 1}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
+        var block = {left: left, bottom: bottom};
+        mapBlocks[mapBlocks.length + 1] = block;
     }
+    if (type === 'obst') {
+        $("#field").append(`<div id="obst${mapObst.length + 1}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+        var obst = {left: left, bottom: bottom};
+        mapObst[mapObst.length + 1] = obst;
+    }
+    if (type === 'net') {
+        var html = `<div id="net${left}_${bottom}" class="blockNet" style="left: ${left}px; bottom: ${bottom}px">`;
+        console.log(html);
+        $("#field").append();
+    }
+}
 
-//    var t = setInterval(() => {
-//        var t = i;
-//        $(".block").toggle();
-//    }, 1000);
 
+
+
+
+
+
+
+
+
+function startCreate() {
+    addNetBlocks();
+}
+function addNetBlocks() {
+    console.log ('hi ' + $('#field').height())
+    for (i = 0; i < $('#field').height(); i + blockSize) {
+        for (g = 0; g < $('#field').width(); g + blockSize) {
+            createObject('net', i, g);
+        }
+    }
 }
