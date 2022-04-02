@@ -287,7 +287,7 @@ function createObject(type, left, bottom) {
     if (type === 'net') {
         var html = `<div id="net${left}_${bottom}" class="blockNet" style="left: ${left}px; bottom: ${bottom}px">`;
         console.log(html);
-        $("#field").append();
+        $("#field").append(html);
     }
 }
 
@@ -305,9 +305,12 @@ function startCreate() {
 }
 function addNetBlocks() {
     console.log ('hi ' + $('#field').height())
-    for (i = 0; i < $('#field').height(); i + blockSize) {
-        for (g = 0; g < $('#field').width(); g + blockSize) {
-            createObject('net', i, g);
+
+    for (i = 0; i < $('#field').height(); i = i + blockSize) {
+        for (g = 0; g < $('#field').width(); g = g + blockSize) {
+            console.log(i);
+            console.log(g);
+            createObject('net', g, i);
         }
     }
 }
