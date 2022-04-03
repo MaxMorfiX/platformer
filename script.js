@@ -27,6 +27,7 @@ var mapBlocks = [
     {bottom: 130, left: 200}
 ];
 var mapObst = [];
+var mapObj = {};
 
 //startGame()
 startCreate()
@@ -280,12 +281,12 @@ function createObject(type, left, bottom) {
         mapBlocks[mapBlocks.length + 1] = block;
     }
     if (type === 'obst') {
-        $("#field").append(`<div id="obst${mapObst.length + 1}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+        $("#field").append(`<div id="obst${left} ${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
         var obst = {left: left, bottom: bottom};
         mapObst[mapObst.length + 1] = obst;
     }
     if (type === 'net') {
-        var html = `<div id="net${left}_${bottom}" class="blockNet" style="left: ${left}px; bottom: ${bottom}px">`;
+        var html = `<div id="net${left}_${bottom}" onclick=createSomething(${left}, ${bottom}) class="blockNet" style="left: ${left}px; bottom: ${bottom}px">`;
         console.log(html);
         $("#field").append(html);
     }
@@ -312,5 +313,20 @@ function addNetBlocks() {
             console.log(g);
             createObject('net', g, i);
         }
+    }
+}
+function createSomething(left, bottom) {
+    var type = mapObj[x + ' ' + y]?mapObj[x + ' ' + y]:'empty';
+    if (type == 'empty') {
+        mapObj[x + ' ' + y] = 'block';
+        createObject('block', left, bottom)
+    }
+    if (type == 'block') {
+        mapObj[x + ' ' + y] = 'obst';
+        createObject('obst', left, bottom)
+    }
+    if (type == 'obst') {
+        mapObj[x + ' ' + y] = 'empty';
+        $(`#obst${left} ${bottom}`).remove()
     }
 }
