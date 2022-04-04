@@ -29,8 +29,8 @@ var mapBlocks = [
 var mapObst = [];
 var mapObj = {};
 
-//startGame()
-startCreate()
+//startGamete
+startCreate();
 
 function startGame() {
     var player = document.getElementById('player');
