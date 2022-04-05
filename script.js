@@ -329,6 +329,7 @@ function startCreate() {
 function addNetBlocks() {
 //    console.log ('hi ' + $('#field').height())
 
+    $('#field').hide();
     for (i = 0; i < $('#field').height(); i = i + blockSize) {
         for (g = 0; g < $('#field').width(); g = g + blockSize) {
 //            console.log(i);
@@ -336,6 +337,7 @@ function addNetBlocks() {
             createObject('net', g, i);
         }
     }
+    $('#field').show();
 }
 function createSomething(left, bottom) {
     var type = mapObj[left + ' ' + bottom] ? mapObj[left + ' ' + bottom] : 'empty';
