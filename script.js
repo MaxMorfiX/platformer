@@ -6,26 +6,14 @@ var xsp = 5;
 var blocks = {};
 var obst = {};
 var yp;
-var blocksCount = 27;
-var obstCount = 4;
+var blocksCount;
+var obstCount;
 var colId;
 const BTN_SPACE = 32;
+const BTN_UP = 38;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
-var mapBlocks = [
-    {bottom: 80, left: 100},
-    {bottom: 50, left: 300},
-    {bottom: 120, left: 100},
-    {bottom: 50, left: 200},
-    {bottom: 50, left: 300},
-    {bottom: 90, left: 400},
-    {bottom: 90, left: 200},
-    {bottom: 90, left: 300},
-    {bottom: 90, left: 400,},
-    {bottom: 130, left: 500},
-    {bottom: 130, left: 300},
-    {bottom: 130, left: 200}
-];
+var mapBlocks = [];
 var mapObst = [];
 var mapObj = {};
 var gameStarted = false;
@@ -40,7 +28,7 @@ function startGame() {
 //  addBlockHitbox(blocksCount);
 //  addObstacleHitbox(obstCount);
     if (!gameStarted) {
-        addBlockHitboxJquery();
+        addHitboxJquery();
         addFieldHitbox();
         document.addEventListener('keydown', KeyDown);
         document.addEventListener('keyup', KeyUp);
@@ -86,11 +74,10 @@ function addFieldHitbox() {
     right['top'] = document.getElementById('field').offsetHeight;
     blocks[blocksCount + 1] = right;
     blocksCount = blocksCount + 1;
-    
     console.log (blocks);
 }
 
-function addBlockHitboxJquery() {
+function addHitboxJquery() {
     var i_blocks = 1;
     var i_obst = 1;
     $(".block, .obstacle").each(function() {
@@ -111,8 +98,12 @@ function addBlockHitboxJquery() {
             i_obst++;
         }
     });
-    blocksCount = $(".block").length;
-    console.log(JSON.stringify(blocksCount));
+    blocksCount = $('.block').length;
+    obstCount = $('.obstacle').length;
+    console.log('blocks');
+    console.log(blocks);
+    console.log('obst');
+    console.log(obst);
 }
 
 function KeyDown(e){
@@ -126,7 +117,7 @@ function KeyUp(e) {
 
 function cycle() {
     var isAtBottom = handleY();
-    if (isAtBottom && buttons[BTN_SPACE]) {
+    if (isAtBottom && buttons[BTN_UP]) {
         ysp = 7;
     }
     
