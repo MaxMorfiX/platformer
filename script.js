@@ -18,6 +18,7 @@ var mapObst = [];
 var mapObj = {};
 var gameStarted = false;
 var player = document.getElementById('player');
+var field = $("#field");
 var gamemode = 'create';
 
 //startGame();
@@ -276,18 +277,18 @@ function hitboxCheck (orientation) {
 }
 function createObject(type, left, bottom) {
     if (type === 'block') {
-        $("#field").append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
+        field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
         var block = {left: left, bottom: bottom};
         mapBlocks[mapBlocks.length + 1] = block;
     }
     if (type === 'obst') {
-        $("#field").append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+        field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
         var obst = {left: left, bottom: bottom};
         mapObst[mapObst.length + 1] = obst;
     }
     if (type === 'net') {
         var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
-        $("#field").append(html);
+        field.append(html);
     }
 }
 
@@ -327,17 +328,17 @@ function startCreate() {
     addNetBlocks();
 }
 function addNetBlocks() {
-//    console.log ('hi ' + $('#field').height())
+//    console.log ('hi ' + field.height())
 
-    $('#field').hide();
-    for (i = 0; i < $('#field').height(); i = i + blockSize) {
-        for (g = 0; g < $('#field').width(); g = g + blockSize) {
+    field.hide();
+    for (i = 0; i < field.height(); i = i + blockSize) {
+        for (g = 0; g < field.width(); g = g + blockSize) {
 //            console.log(i);
 //            console.log(g);
             createObject('net', g, i);
         }
     }
-    $('#field').show();
+    field.show();
 }
 function createSomething(left, bottom) {
     var type = mapObj[left + ' ' + bottom] ? mapObj[left + ' ' + bottom] : 'empty';
