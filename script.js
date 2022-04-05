@@ -28,6 +28,7 @@ function startGame() {
 //  addBlockHitbox(blocksCount);
 //  addObstacleHitbox(obstCount);
     if (!gameStarted) {
+        console.log ('ggame start' + gamemode);
         addHitboxJquery();
         addFieldHitbox();
         document.addEventListener('keydown', KeyDown);
@@ -74,7 +75,7 @@ function addFieldHitbox() {
     right['top'] = document.getElementById('field').offsetHeight;
     blocks[blocksCount + 1] = right;
     blocksCount = blocksCount + 1;
-    console.log (blocks);
+//    console.log (blocks);
 }
 
 function addHitboxJquery() {
@@ -298,17 +299,19 @@ function createObject(type, left, bottom) {
 
 function playOrCreate () {
     if (gamemode == 'play') {
-        console.log ('boo');
+        gamemode = 'create';
+        console.log (gamemode);
         player.style.left = '30px';
         player.style.bottom = '250px';
         gameStarted = false;
-        gamemode = 'create';
         startCreate();
-    }
-    if (gamemode == 'create') {
-        $('.blockNet').remove();
-        gamemode = 'play';
-        startGame();
+    } else {
+        if (gamemode == 'create') {
+            $('.blockNet').remove();
+            gamemode = 'play';
+            console.log (gamemode);
+            startGame();
+        }
     }
 }
 
