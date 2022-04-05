@@ -276,18 +276,17 @@ function hitboxCheck (orientation) {
 }
 function createObject(type, left, bottom) {
     if (type === 'block') {
-        $("#field").append(`<div id="block${mapBlocks.length + 1}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
+        $("#field").append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
         var block = {left: left, bottom: bottom};
         mapBlocks[mapBlocks.length + 1] = block;
     }
     if (type === 'obst') {
-        $("#field").append(`<div id="obst${left} ${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+        $("#field").append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
         var obst = {left: left, bottom: bottom};
         mapObst[mapObst.length + 1] = obst;
     }
     if (type === 'net') {
-        var html = `<div id="net${left}_${bottom}" onclick=createSomething(${left}, ${bottom}) class="blockNet" style="left: ${left}px; bottom: ${bottom}px">`;
-        console.log(html);
+        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
         $("#field").append(html);
     }
 }
@@ -305,28 +304,32 @@ function startCreate() {
     addNetBlocks();
 }
 function addNetBlocks() {
-    console.log ('hi ' + $('#field').height())
+//    console.log ('hi ' + $('#field').height())
 
     for (i = 0; i < $('#field').height(); i = i + blockSize) {
         for (g = 0; g < $('#field').width(); g = g + blockSize) {
-            console.log(i);
-            console.log(g);
+//            console.log(i);
+//            console.log(g);
             createObject('net', g, i);
         }
     }
 }
 function createSomething(left, bottom) {
-    var type = mapObj[x + ' ' + y]?mapObj[x + ' ' + y]:'empty';
+    var type = mapObj[left + ' ' + bottom] ? mapObj[left + ' ' + bottom] : 'empty';
     if (type == 'empty') {
-        mapObj[x + ' ' + y] = 'block';
-        createObject('block', left, bottom)
+        mapObj[left + ' ' + bottom] = 'block';
+        createObject('block', left, bottom);
+        console.log ($(`#block ${left}${bottom}`));
     }
     if (type == 'block') {
-        mapObj[x + ' ' + y] = 'obst';
-        createObject('obst', left, bottom)
+        mapObj[left + ' ' + bottom] = 'obst';
+        $(`#block${left}${bottom}`).remove()
+        createObject('obst', left, bottom);
+        console.log ();
     }
     if (type == 'obst') {
-        mapObj[x + ' ' + y] = 'empty';
-        $(`#obst${left} ${bottom}`).remove()
+        mapObj[left + ' ' + bottom] = 'empty';
+        $(`#obst${left}${bottom}`).remove();
+        console.log ();
     }
 }
