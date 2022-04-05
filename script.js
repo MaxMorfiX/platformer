@@ -287,7 +287,7 @@ function createObject(type, left, bottom) {
         mapObst[mapObst.length + 1] = obst;
     }
     if (type === 'net') {
-        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
+        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
         field.append(html);
     }
 }
@@ -337,6 +337,9 @@ function addNetBlocks() {
             createObject('net', g, i);
         }
     }
+
+    $(".blockNet").show();
+
 }
 function createSomething(left, bottom) {
     var type = mapObj[left + ' ' + bottom] ? mapObj[left + ' ' + bottom] : 'empty';
