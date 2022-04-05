@@ -132,6 +132,8 @@ function cycle() {
 //    console.log (yp + " " + ysp);
     player.style.bottom = (yp + ysp + 'px');
     
+    liveOrDie();
+    
     if (gamemode == 'play') {
         setTimeout (cycle, gamespeed);
     }
