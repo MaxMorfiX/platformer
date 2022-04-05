@@ -28,20 +28,25 @@ var mapBlocks = [
 ];
 var mapObst = [];
 var mapObj = {};
+var gameStarted = false;
+var player = document.getElementById('player');
+var gamemode = 'create';
 
-//startGamete
+//startGame();
 startCreate();
 
 function startGame() {
-    var player = document.getElementById('player');
-    document.addEventListener('keydown', KeyDown);
-    document.addEventListener('keyup', KeyUp);
-//    create_blocks_from_json();
-    addBlockHitboxJquery();
-    addFieldHitbox();
-//addBlockHitbox(blocksCount);
-//addObstacleHitbox(obstCount);
-    setTimeout(cycle, 1000);
+//  create_blocks_from_json();
+//  addBlockHitbox(blocksCount);
+//  addObstacleHitbox(obstCount);
+    if (!gameStarted) {
+        addBlockHitboxJquery();
+        addFieldHitbox();
+        document.addEventListener('keydown', KeyDown);
+        document.addEventListener('keyup', KeyUp);
+        setTimeout(cycle, 1000);
+        gameStarted = true;
+    }
 }
 
 function getBottom(id) {
@@ -136,8 +141,8 @@ function cycle() {
 //    console.log (yp + " " + ysp);
     player.style.bottom = (yp + ysp + 'px');
     
-    setTimeout (cycle, gamespeed);
-    if (liveOrDie()) {} else {
+    if (gamemode == 'play') {
+        setTimeout (cycle, gamespeed);
     }
 }
 
@@ -164,9 +169,10 @@ function liveOrDie() {
     }
 }
 function gameOver() {
+    buttons = {};
     alert ('game over');
-    document.getElementById('player').style.left = '235px';
-    document.getElementById('player').style.bottom = '250px';
+    player.style.left = '30px';
+    player.style.bottom = '250px';
 }
 
 function handleY() {
@@ -297,6 +303,27 @@ function createObject(type, left, bottom) {
 
 
 
+function playOrCreate () {
+    if (gamemode == 'play') {
+        console.log ('boo');
+        player.style.left = '30px';
+        player.style.bottom = '250px';
+        gameStarted = false;
+        gamemode = 'create';
+        startCreate();
+    }
+    if (gamemode == 'create') {
+        $('.blockNet').remove();
+        gamemode = 'play';
+        startGame();
+    }
+}
+
+
+
+
+
+
 
 
 
@@ -319,17 +346,17 @@ function createSomething(left, bottom) {
     if (type == 'empty') {
         mapObj[left + ' ' + bottom] = 'block';
         createObject('block', left, bottom);
-        console.log ($(`#block ${left}${bottom}`));
+//        console.log ($(`#block ${left}${bottom}`));
     }
     if (type == 'block') {
         mapObj[left + ' ' + bottom] = 'obst';
         $(`#block${left}${bottom}`).remove()
         createObject('obst', left, bottom);
-        console.log ();
+//        console.log ();
     }
     if (type == 'obst') {
         mapObj[left + ' ' + bottom] = 'empty';
         $(`#obst${left}${bottom}`).remove();
-        console.log ();
+//        console.log ();
     }
 }
