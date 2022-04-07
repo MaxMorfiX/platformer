@@ -39,3 +39,44 @@ function addObstacleHitbox(count) {
     }
     console.log (obst);
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+<!--            <div id="obst1" class="obstacle" style="bottom: 340px; left: 175px"></div>
+            <div id="obst2" class="obstacle" style="bottom: 340px; left: 145px"></div>
+            <div id="obst3" class="obstacle" style="bottom: 340px; left: 115px"></div>
+            <div id="obst4" class="obstacle" style="bottom: 0px; left: 95px"></div>
+
+
+            <div id="block1" class="block" style="bottom: 250px; left: 205px"></div>
+            <div id="block2" class="block" style="bottom: 220px; left: 235px"></div>
+            <div id="block3" class="block" style="bottom: 220px; left: 265px"></div>
+            <div id="block4" class="block" style="bottom: 340px; left: 325px"></div>
+            <div id="block5" class="block" style="bottom: 340px; left: 295px"></div>
+            <div id="block6" class="block" style="bottom: 220px; left: 295px"></div>
+            <div id="block7" class="block" style="bottom: 250px; left: 295px"></div>
+            <div id="block8" class="block" style="bottom: 250px; left: 295px"></div>
+            <div id="block9" class="block" style="bottom: 250px; left: 295px"></div>
+            <div id="block10" class="block" style="bottom: 220px; left: 205px"></div>
+            <div id="block11" class="block" style="bottom: 250px; left: 175px"></div>
+            <div id="block12" class="block" style="bottom: 250px; left: 145px"></div>
+            <div id="block13" class="block" style="bottom: 250px; left: 115px"></div>
+            <div id="block14" class="block" style="bottom: 250px; left: 85px"></div>
+            <div id="block15" class="block" style="bottom: 250px; left: 55px"></div>
+            <div id="block16" class="block" style="bottom: 250px; left: 25px"></div>
+            <div id="block17" class="block" style="bottom: 280px; left: 25px"></div>
+            <div id="block18" class="block" style="bottom: 310px; left: 25px"></div>
+            <div id="block19" class="block" style="bottom: 340px; left: 25px"></div>
+            <div id="block20" class="block" style="bottom: 220px; left: 385px"></div>
+            <div id="block21" class="block" style="bottom: 220px; left: 475px"></div>
+            <div id="block22" class="block" style="bottom: 190px; left: 595px"></div>
+            <div id="block23" class="block" style="bottom: 220px; left: 655px"></div>
+            <div id="block24" class="block" style="bottom: 250px; left: 595px"></div>
+            <div id="block25" class="block" style="bottom: 280px; left: 655px"></div>
+            <div id="block26" class="block" style="bottom: 220px; left: 745px"></div>
+            <div id="block27" class="block" style="bottom: 70px; left: 805px"></div> -->

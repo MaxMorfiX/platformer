@@ -20,23 +20,36 @@ var gameStarted = false;
 var player = document.getElementById('player');
 var field = $("#field");
 var gamemode = 'create';
+var live = true;
 
-//startGame();
+document.addEventListener('keydown', KeyDown);
+document.addEventListener('keyup', KeyUp);
+
 startCreate();
 
 function startGame() {
+    
 //  create_blocks_from_json();
 //  addBlockHitbox(blocksCount);
 //  addObstacleHitbox(obstCount);
     if (!gameStarted) {
-        console.log ('ggame start' + gamemode);
+        live = true;
+        player.style.left = '30px';
+        player.style.bottom = '270px';
+//        console.log ('ggame start' + gamemode);
         addHitboxJquery();
         addFieldHitbox();
-        document.addEventListener('keydown', KeyDown);
-        document.addEventListener('keyup', KeyUp);
-        setTimeout(cycle, 1000);
+        setTimeout(cycle, 10);
         gameStarted = true;
     }
+}
+
+function restartGame() {
+    document.removeEventListener('keydown', restartGame);
+    console.log('boo')
+    $('#gameOver').hide();
+    $('#PABTR').hide();
+    startGame();
 }
 
 function getBottom(id) {
@@ -137,7 +150,13 @@ function cycle() {
     liveOrDie();
     
     if (gamemode == 'play') {
-        setTimeout (cycle, gamespeed);
+        if (live) {
+            setTimeout (cycle, gamespeed);
+        } else {
+            gameStarted = false;
+        }
+    } else {
+        gameStarted = false;
     }
 }
 
@@ -165,9 +184,10 @@ function liveOrDie() {
 }
 function gameOver() {
     buttons = {};
-    alert ('game over');
-    player.style.left = '30px';
-    player.style.bottom = '250px';
+    live = false;
+    $('#gameOver').show();
+    $('#PABTR').show();
+    document.addEventListener('keydown', restartGame)
 }
 
 function handleY() {
