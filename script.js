@@ -13,6 +13,7 @@ const BTN_SPACE = 32;
 const BTN_UP = 38;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
+const SEPARATOR = '_';
 var mapObj = {};
 var gameStarted = false;
 var player = document.getElementById('player');
@@ -158,7 +159,7 @@ function cycle() {
     }
     
     yp = getBottom('player');
-//    console.log (yp + " " + ysp);
+//    console.log (yp + SEPARATOR + ysp);
     player.style.bottom = (yp + ysp + 'px');
     
     liveOrDie();
@@ -208,7 +209,7 @@ function handleY() {
 
 
     if (hitboxCheck('top')) {
-//        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + (blocks[colId]['bottom'] - blockSize - 1) + ' ' + colId);
+//        console.log (getBottom('player') + SEPARATOR + blocks[colId]['bottom'] + SEPARATOR + (blocks[colId]['bottom'] - blockSize - 1) + SEPARATOR + colId);
         player.style.bottom = blocks[colId]['bottom'] - blockSize - 1 + 'px';
 //        console.log (getBottom('player') + 'now');
         ysp = 0;
@@ -360,20 +361,20 @@ function addNetBlocks() {
 
 }
 function createSomething(left, bottom) {
-    var type = mapObj[left + ' ' + bottom] ? mapObj[left + ' ' + bottom] : 'empty';
+    var type = mapObj[left + SEPARATOR + bottom] ? mapObj[left + SEPARATOR + bottom] : 'empty';
     if (type == 'empty') {
-        mapObj[left + ' ' + bottom] = 'block';
+        mapObj[left + SEPARATOR + bottom] = 'block';
         createObject('block', left, bottom);
 //        console.log ($(`#block ${left}${bottom}`));
     }
     if (type == 'block') {
-        mapObj[left + ' ' + bottom] = 'obst';
+        mapObj[left + SEPARATOR + bottom] = 'obst';
         $(`#block${left}${bottom}`).remove();
         createObject('obst', left, bottom);
 //        console.log ();
     }
     if (type == 'obst') {
-        mapObj[left + ' ' + bottom] = 'empty';
+        mapObj[left + SEPARATOR + bottom] = 'empty';
         $(`#obst${left}${bottom}`).remove();
 //        console.log ();
     }
