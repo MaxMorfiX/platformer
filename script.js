@@ -13,7 +13,8 @@ const BTN_SPACE = 32;
 const BTN_UP = 38;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
-const SEPARATOR = '_';
+var mapBlocks = [];
+var mapObst = [];
 var mapObj = {};
 var gameStarted = false;
 var player = document.getElementById('player');
@@ -62,7 +63,7 @@ function fitToSize() {
     $('#field').width(x);
     $('#field').height(y);
     $('#field').css('display', 'block');
-    $('.button').show();
+    $('#button').css('display', 'block');
     $('#gameOver').left = window.innerWidth / 2 - 450;
     $('#gameOver').top = window.innerHeight / 2 - 100;
 }
@@ -159,7 +160,7 @@ function cycle() {
     }
     
     yp = getBottom('player');
-//    console.log (yp + SEPARATOR + ysp);
+//    console.log (yp + " " + ysp);
     player.style.bottom = (yp + ysp + 'px');
     
     liveOrDie();
@@ -209,7 +210,7 @@ function handleY() {
 
 
     if (hitboxCheck('top')) {
-//        console.log (getBottom('player') + SEPARATOR + blocks[colId]['bottom'] + SEPARATOR + (blocks[colId]['bottom'] - blockSize - 1) + SEPARATOR + colId);
+//        console.log (getBottom('player') + ' ' + blocks[colId]['bottom'] + ' ' + (blocks[colId]['bottom'] - blockSize - 1) + ' ' + colId);
         player.style.bottom = blocks[colId]['bottom'] - blockSize - 1 + 'px';
 //        console.log (getBottom('player') + 'now');
         ysp = 0;
@@ -361,20 +362,20 @@ function addNetBlocks() {
 
 }
 function createSomething(left, bottom) {
-    var type = mapObj[left + SEPARATOR + bottom] ? mapObj[left + SEPARATOR + bottom] : 'empty';
+    var type = mapObj[left + ' ' + bottom] ? mapObj[left + ' ' + bottom] : 'empty';
     if (type == 'empty') {
-        mapObj[left + SEPARATOR + bottom] = 'block';
+        mapObj[left + ' ' + bottom] = 'block';
         createObject('block', left, bottom);
 //        console.log ($(`#block ${left}${bottom}`));
     }
     if (type == 'block') {
-        mapObj[left + SEPARATOR + bottom] = 'obst';
-        $(`#block${left}${bottom}`).remove();
+        mapObj[left + ' ' + bottom] = 'obst';
+        $(`#block${left}${bottom}`).remove()
         createObject('obst', left, bottom);
 //        console.log ();
     }
     if (type == 'obst') {
-        mapObj[left + SEPARATOR + bottom] = 'empty';
+        mapObj[left + ' ' + bottom] = 'empty';
         $(`#obst${left}${bottom}`).remove();
 //        console.log ();
     }
@@ -382,49 +383,16 @@ function createSomething(left, bottom) {
 function createObject(type, left, bottom) {
     if (type === 'block') {
         field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
+        var block = {left: left, bottom: bottom};
+        mapBlocks[mapBlocks.length + 1] = block;
     }
     if (type === 'obst') {
         field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+        var obst = {left: left, bottom: bottom};
+        mapObst[mapObst.length + 1] = obst;
     }
     if (type === 'net') {
         var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
         field.append(html);
     }
 }
-
-//    var name = prompt("Name");
-
-function getAllMapsFromLS() {
-    var maps = localStorage.getItem('maps');
-    return maps ? JSON.parse(maps) : [];
-}
-
-function onSave() {
-    var maps = getAllMapsFromLS();
-    maps.push(mapObj);
-    localStorage.setItem('maps', JSON.stringify(maps));
-}
-
-function restore_save(map) {
-    for (var key in map) {
-        var parts = key.split(SEPARATOR);
-        if (parts.length !== 2) {
-            console.log('Some error in key');
-            continue;
-        }
-        console.log(`Map x: ${parts[0]}, y: ${parts[1]}, type: ${map[key]}`);
-    }
-}
-
-function onLoad() {
-    var maps = getAllMapsFromLS();
-        console.log('loaded');
-        console.log(JSON.stringify(maps));
-    if (maps) {
-        restore_save(maps[0]);
-    }
-}
-
-
-$("#save_button").click(onSave);
-$("#load_button").click(onLoad);
