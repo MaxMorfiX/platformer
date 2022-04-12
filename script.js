@@ -391,3 +391,40 @@ function createObject(type, left, bottom) {
         field.append(html);
     }
 }
+
+//    var name = prompt("Name");
+
+function getAllMapsFromLS() {
+    var maps = localStorage.getItem('maps');
+    return maps ? JSON.parse(maps) : [];
+}
+
+function onSave() {
+    var maps = getAllMapsFromLS();
+    maps.push(mapObj);
+    localStorage.setItem('maps', JSON.stringify(maps));
+}
+
+function restore_save(map) {
+    for (var key in map) {
+        var parts = key.split(SEPARATOR);
+        if (parts.length !== 2) {
+            console.log('Some error in key');
+            continue;
+        }
+        console.log(`Map x: ${parts[0]}, y: ${parts[1]}, type: ${map[key]}`);
+    }
+}
+
+function onLoad() {
+    var maps = getAllMapsFromLS();
+        console.log('loaded');
+        console.log(JSON.stringify(maps));
+    if (maps) {
+        restore_save(maps[0]);
+    }
+}
+
+
+$("#save_button").click(onSave);
+$("#load_button").click(onLoad);
