@@ -13,8 +13,6 @@ const BTN_SPACE = 32;
 const BTN_UP = 38;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
-var mapBlocks = [];
-var mapObst = [];
 var mapObj = {};
 var gameStarted = false;
 var player = document.getElementById('player');
@@ -63,7 +61,7 @@ function fitToSize() {
     $('#field').width(x);
     $('#field').height(y);
     $('#field').css('display', 'block');
-    $('#button').css('display', 'block');
+    $('.button').show();
     $('#gameOver').left = window.innerWidth / 2 - 450;
     $('#gameOver').top = window.innerHeight / 2 - 100;
 }
@@ -370,7 +368,7 @@ function createSomething(left, bottom) {
     }
     if (type == 'block') {
         mapObj[left + ' ' + bottom] = 'obst';
-        $(`#block${left}${bottom}`).remove()
+        $(`#block${left}${bottom}`).remove();
         createObject('obst', left, bottom);
 //        console.log ();
     }
@@ -383,13 +381,9 @@ function createSomething(left, bottom) {
 function createObject(type, left, bottom) {
     if (type === 'block') {
         field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
-        var block = {left: left, bottom: bottom};
-        mapBlocks[mapBlocks.length + 1] = block;
     }
     if (type === 'obst') {
         field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
-        var obst = {left: left, bottom: bottom};
-        mapObst[mapObst.length + 1] = obst;
     }
     if (type === 'net') {
         var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
