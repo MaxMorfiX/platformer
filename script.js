@@ -340,6 +340,7 @@ function playOrCreate () {
 
 
 function startCreate() {
+    load();
     player.style.left = '30px';
     player.style.bottom = '330px';
     console.log (gamemode);
@@ -378,6 +379,7 @@ function createSomething(left, bottom) {
         $(`#obst${left}${bottom}`).remove();
 //        console.log ();
     }
+    save();
 }
 function createObject(type, left, bottom) {
     if (type === 'block') {
@@ -392,39 +394,25 @@ function createObject(type, left, bottom) {
     }
 }
 
-//    var name = prompt("Name");
 
-function getAllMapsFromLS() {
-    var maps = localStorage.getItem('maps');
-    return maps ? JSON.parse(maps) : [];
+
+function save() {
+    localStorage.setItem('map', JSON.stringify(mapObj));
+    console.log('saved ' + localStorage.getItem('map'))
 }
 
-function onSave() {
-    var maps = getAllMapsFromLS();
-    maps.push(mapObj);
-    localStorage.setItem('maps', JSON.stringify(maps));
-}
-
-function restore_save(map) {
-    for (var key in map) {
+function load() {
+    for (var key in localStorage.getItem('map')) {
         var parts = key.split(SEPARATOR);
         if (parts.length !== 2) {
             console.log('Some error in key');
             continue;
         }
-        console.log(`Map x: ${parts[0]}, y: ${parts[1]}, type: ${map[key]}`);
+        console.log(`x: ${parts[0]}, y: ${parts[1]}, type: ${map[key]}`);
     }
 }
-
-function onLoad() {
-    var maps = getAllMapsFromLS();
-        console.log('loaded');
-        console.log(JSON.stringify(maps));
-    if (maps) {
-        restore_save(maps[0]);
-    }
-}
-
-
+/*
+var name = prompt("Name");
 $("#save_button").click(onSave);
 $("#load_button").click(onLoad);
+*/
