@@ -1,11 +1,12 @@
 .field {
     position: relative;
-    width: 990px;
-    height: 510px;
+    width: 1230px;
+    height: 630px;
     color: gray;
     background-color: gray;
     z-index: 1;
     border: none;
+    display: none;
 }
 .player {
     position: absolute;
@@ -39,10 +40,13 @@
     background: url('textures/obst.png');
 }
 .button {
-    position: absolute;
-    width: 100px;
-    height: 510px;
+    position: relative;
+    width: 90px;
+    border: 5px;
+    height: 30px;
     background-color: black;
+    display: none;
+    background: url('textures/play.png');
 }
 .blockNet {
     position: absolute;

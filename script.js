@@ -25,6 +25,7 @@ var live = true;
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
 
+fitToSize();
 startCreate();
 
 function startGame() {
@@ -33,9 +34,11 @@ function startGame() {
 //  addBlockHitbox(blocksCount);
 //  addObstacleHitbox(obstCount);
     if (!gameStarted) {
+        $('.blockNet').remove();
+        console.log (gamemode);
         live = true;
         player.style.left = '30px';
-        player.style.bottom = '270px';
+        player.style.bottom = '330px';
 //        console.log ('ggame start' + gamemode);
         addHitboxJquery();
         addFieldHitbox();
@@ -43,13 +46,26 @@ function startGame() {
         gameStarted = true;
     }
 }
-
 function restartGame() {
     document.removeEventListener('keydown', restartGame);
     console.log('boo')
     $('#gameOver').hide();
     $('#PABTR').hide();
     startGame();
+}
+
+function fitToSize() {
+    var y = Math.floor(window.innerHeight/blockSize) - 2;
+    var x = Math.floor(window.innerWidth/blockSize);
+    x = x * blockSize;
+    y = y * blockSize;
+    console.log(x + 'px ' + y + 'px');
+    $('#field').width(x);
+    $('#field').height(y);
+    $('#field').css('display', 'block');
+    $('#button').css('display', 'block');
+    $('#gameOver').left = window.innerWidth / 2 - 450;
+    $('#gameOver').top = window.innerHeight / 2 - 100;
 }
 
 function getBottom(id) {
@@ -285,30 +301,14 @@ function hitboxCheck (orientation) {
 //            console.log ('check bad' + i);
             if (right > obst[i]['left'] + 1) {
                 if (left < obst[i]['right'] - 1) {
-                    if (top >= obst[i]['bottom']) {
-                        if (bottom <= obst[i]['top']) {
+                    if (top >= obst[i]['bottom'] + 1) {
+                        if (bottom <= obst[i]['top'] - 1) {
                             return true;
                         }
                     }
                 }
             }
         }
-    }
-}
-function createObject(type, left, bottom) {
-    if (type === 'block') {
-        field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
-        var block = {left: left, bottom: bottom};
-        mapBlocks[mapBlocks.length + 1] = block;
-    }
-    if (type === 'obst') {
-        field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
-        var obst = {left: left, bottom: bottom};
-        mapObst[mapObst.length + 1] = obst;
-    }
-    if (type === 'net') {
-        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
-        field.append(html);
     }
 }
 
@@ -321,16 +321,12 @@ function createObject(type, left, bottom) {
 function playOrCreate () {
     if (gamemode == 'play') {
         gamemode = 'create';
-        console.log (gamemode);
-        player.style.left = '30px';
-        player.style.bottom = '250px';
-        gameStarted = false;
+        $('#button').css('background', 'url("textures/play.png")');
         startCreate();
     } else {
         if (gamemode == 'create') {
-            $('.blockNet').remove();
             gamemode = 'play';
-            console.log (gamemode);
+            $('#button').css('background', 'url("textures/create.png")');
             startGame();
         }
     }
@@ -345,6 +341,10 @@ function playOrCreate () {
 
 
 function startCreate() {
+    player.style.left = '30px';
+    player.style.bottom = '330px';
+    console.log (gamemode);
+    gameStarted = false;
     addNetBlocks();
 }
 function addNetBlocks() {
@@ -378,5 +378,21 @@ function createSomething(left, bottom) {
         mapObj[left + ' ' + bottom] = 'empty';
         $(`#obst${left}${bottom}`).remove();
 //        console.log ();
+    }
+}
+function createObject(type, left, bottom) {
+    if (type === 'block') {
+        field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
+        var block = {left: left, bottom: bottom};
+        mapBlocks[mapBlocks.length + 1] = block;
+    }
+    if (type === 'obst') {
+        field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+        var obst = {left: left, bottom: bottom};
+        mapObst[mapObst.length + 1] = obst;
+    }
+    if (type === 'net') {
+        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
+        field.append(html);
     }
 }
