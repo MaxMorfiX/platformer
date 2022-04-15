@@ -402,7 +402,8 @@ function save() {
 }
 
 function load() {
-    for (var key in localStorage.getItem('map')) {
+    var map = JSON.parse(localStorage.getItem('map'));
+    for (var key in map) {
         var parts = key.split(SEPARATOR);
         if (parts.length !== 2) {
             console.log('Some error in key');
