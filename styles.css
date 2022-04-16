@@ -42,7 +42,7 @@
 .button {
     position: absolute;
     width: 90px;
-    border: 5px;
+    border: 10px;
     height: 30px;
     background-color: black;
     display: none;
@@ -67,6 +67,16 @@
     background: url('textures/gameOver.png');
     background-size: 100% 100%;
     display: none;
+}
+.clearAll {
+    position: absolute;
+    width: 150px;
+    border: 10px;
+    height: 30px;
+    background-color: black;
+    display: none;
+    z-index: 5;
+    background: url('textures/clearAll.png');
 }
 .PABTR {
     position: absolute;

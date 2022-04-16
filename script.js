@@ -20,6 +20,7 @@ var player = document.getElementById('player');
 var field = $("#field");
 var gamemode = 'create';
 var live = true;
+var startMap = {"0_300":"block","30_300":"block","60_300":"block","90_300":"block","120_240":"obst","150_240":"obst","180_240":"obst","210_300":"block","240_300":"block","270_300":"block","300_300":"block","330_330":"obst","360_330":"obst","330_300":"block","360_300":"block","390_300":"block","420_300":"block","450_300":"block","480_300":"block","510_300":"block","330_420":"obst","360_420":"obst","300_450":"block","330_450":"block","360_450":"block","390_450":"block","510_330":"obst","600_300":"obst","600_270":"block","630_270":"block","660_270":"block","540_210":"obst","570_210":"obst","510_240":"obst","690_270":"block","720_270":"block","750_270":"block","780_300":"obst","780_330":"obst","780_360":"obst","780_270":"block"}
 
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
@@ -59,17 +60,26 @@ function fitToSize() {
     x = x * blockSize;
     y = y * blockSize;
     console.log(x + 'px and ' + y + 'px');
+    $('#button').show();
+    $('#clearAll').show();
+    $('#gameOver').show();
+    $('#PABTR').show();
+    
+    $('#field').css('display', 'block');
     $('#field').width(x);
     $('#field').height(y);
-    $('#field').css('display', 'block');
-    $('.button').bottom = -blockSize;
-    $('.button').show();
-    $('.gameOver').show();
-    $('.PABTR').show();
+    $('#button').offset({left: 10, top: $('#field').height() + 10});
+    $('#clearAll').offset({left: field.width() - 150, top: $('#field').height() + 10});
+    $('#clearAll').left = field.width - 130;
+    $('#clearAll').bottom = -blockSize;
+    
+    
+    
     $('#gameOver').offset({left: window.innerWidth / 2 - 450, top: window.innerHeight / 2 - 135});
     $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
-    $('.PABTR').hide();
-    $('.gameOver').hide();
+    
+    $('#PABTR').hide();
+    $('#gameOver').hide();
 }
 
 function getBottom(id) {
@@ -331,6 +341,7 @@ function playOrCreate () {
         if (gamemode == 'create') {
             gamemode = 'play';
             $('#button').css('background', 'url("textures/create.png")');
+            $('#clearAll').hide()
             startGame();
         }
     }
@@ -346,6 +357,7 @@ function playOrCreate () {
 
 function startCreate() {
     load();
+    $('#clearAll').show()
     player.style.left = '30px';
     player.style.bottom = '330px';
     console.log (gamemode);
@@ -366,6 +378,11 @@ function addNetBlocks() {
     $(".blockNet").show();
 
 }
+function clearAll() {
+    $('.block, .obstacle').remove();
+    mapObj = {};
+    save()
+}
 function createSomething(left, bottom) {
     var type = mapObj[left + SEPARATOR + bottom] ? mapObj[left + SEPARATOR + bottom] : 'empty';
     if (type == 'empty') {
@@ -376,23 +393,32 @@ function createSomething(left, bottom) {
     if (type == 'block') {
         mapObj[left + SEPARATOR + bottom] = 'obst';
         $(`#block${left}${bottom}`).remove();
-        console.log('REMOVED block')
         createObject('obst', left, bottom);
 //        console.log ();
     }
     if (type == 'obst') {
         mapObj[left + SEPARATOR + bottom] = 'empty';
         $(`#obst${left}${bottom}`).remove();
-        console.log('REMOVED obst')
 //        console.log ();
     }
     save();
 }
-function save() {
-    localStorage.setItem('map', JSON.stringify(mapObj));
-    console.log('saved ' + localStorage.getItem('map'))
+function createObject(type, left, bottom) {
+    if (type === 'block') {
+        field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
+    }
+    if (type === 'obst') {
+        field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
+    }
+    if (type === 'net') {
+        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
+        field.append(html);
+    }
 }
 
+function save() {
+    localStorage.setItem('map', JSON.stringify(mapObj));
+}
 function load() {
     var map = JSON.parse(localStorage.getItem('map'));
     for (var key in map) {
@@ -405,19 +431,15 @@ function load() {
         createObject(map[key], parts[0], parts[1]);
     }
     if($(".block, .obstacle").length == 0) {
-        
-    }
-}
-function createObject(type, left, bottom) {
-    if (type === 'block') {
-        field.append(`<div id="block${left}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
-    }
-    if (type === 'obst') {
-        field.append(`<div id="obst${left}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
-    }
-    if (type === 'net') {
-        var html = `<div id="net${left}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
-        field.append(html);
+        for (var key in startMap) {
+            var parts = key.split(SEPARATOR);
+            if (parts.length !== 2) {
+                console.log('Some error in loading start map');
+                continue;
+            }
+            mapObj[parts[0] + SEPARATOR + parts[1]] = startMap[key];
+            createObject(startMap[key], parts[0], parts[1]);
+        }
     }
 }
 
