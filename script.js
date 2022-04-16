@@ -58,13 +58,16 @@ function fitToSize() {
     var x = Math.floor(window.innerWidth/blockSize);
     x = x * blockSize;
     y = y * blockSize;
-    console.log(x + 'px ' + y + 'px');
+    console.log(x + 'px and ' + y + 'px');
     $('#field').width(x);
     $('#field').height(y);
     $('#field').css('display', 'block');
+    $('.button').bottom = -blockSize;
     $('.button').show();
+    console.log('before ' + $('#gameOver').offset().left + ' ' + $('#gameOver').offset().top);
     $('#gameOver').left = window.innerWidth / 2 - 450;
     $('#gameOver').top = window.innerHeight / 2 - 100;
+    console.log('after ' + $('#gameOver').left + ' ' + $('#gameOver').top);
 }
 
 function getBottom(id) {
@@ -371,15 +374,37 @@ function createSomething(left, bottom) {
     if (type == 'block') {
         mapObj[left + SEPARATOR + bottom] = 'obst';
         $(`#block${left}${bottom}`).remove();
+        console.log('REMOVED block')
         createObject('obst', left, bottom);
 //        console.log ();
     }
     if (type == 'obst') {
         mapObj[left + SEPARATOR + bottom] = 'empty';
         $(`#obst${left}${bottom}`).remove();
+        console.log('REMOVED obst')
 //        console.log ();
     }
     save();
+}
+function save() {
+    localStorage.setItem('map', JSON.stringify(mapObj));
+    console.log('saved ' + localStorage.getItem('map'))
+}
+
+function load() {
+    var map = JSON.parse(localStorage.getItem('map'));
+    for (var key in map) {
+        var parts = key.split(SEPARATOR);
+        if (parts.length !== 2) {
+            console.log('Some error in loading map');
+            continue;
+        }
+        mapObj[parts[0] + SEPARATOR + parts[1]] = map[key];
+        createObject(map[key], parts[0], parts[1]);
+    }
+    if($(".block, .obstacle").length == 0) {
+        
+    }
 }
 function createObject(type, left, bottom) {
     if (type === 'block') {
@@ -396,22 +421,6 @@ function createObject(type, left, bottom) {
 
 
 
-function save() {
-    localStorage.setItem('map', JSON.stringify(mapObj));
-    console.log('saved ' + localStorage.getItem('map'))
-}
-
-function load() {
-    var map = JSON.parse(localStorage.getItem('map'));
-    for (var key in map) {
-        var parts = key.split(SEPARATOR);
-        if (parts.length !== 2) {
-            console.log('Some error in key');
-            continue;
-        }
-        console.log(`x: ${parts[0]}, y: ${parts[1]}, type: ${map[key]}`);
-    }
-}
 /*
 var name = prompt("Name");
 $("#save_button").click(onSave);
