@@ -64,10 +64,12 @@ function fitToSize() {
     $('#field').css('display', 'block');
     $('.button').bottom = -blockSize;
     $('.button').show();
-    console.log('before ' + $('#gameOver').offset().left + ' ' + $('#gameOver').offset().top);
-    $('#gameOver').left = window.innerWidth / 2 - 450;
-    $('#gameOver').top = window.innerHeight / 2 - 100;
-    console.log('after ' + $('#gameOver').left + ' ' + $('#gameOver').top);
+    $('.gameOver').show();
+    $('.PABTR').show();
+    $('#gameOver').offset({left: window.innerWidth / 2 - 450, top: window.innerHeight / 2 - 135});
+    $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
+    $('.PABTR').hide();
+    $('.gameOver').hide();
 }
 
 function getBottom(id) {

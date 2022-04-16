@@ -68,16 +68,6 @@
     background-size: 100% 100%;
     display: none;
 }
-.gameOver {
-    position: absolute;
-    width: 900px;
-    height: 200px;
-    z-index: 6;
-    border: none;
-    background: url('textures/gameOver.png');
-    background-size: 100% 100%;
-    display: none;
-}
 .PABTR {
     position: absolute;
     width: 480px;
