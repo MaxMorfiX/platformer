@@ -23,6 +23,7 @@ var live = true;
 var device;
 var startMap = {"0_300":"block","30_300":"block","60_300":"block","90_300":"block","120_240":"obst","150_240":"obst","180_240":"obst","210_300":"block","240_300":"block","270_300":"block","300_300":"block","330_330":"obst","360_330":"obst","330_300":"block","360_300":"block","390_300":"block","420_300":"block","450_300":"block","480_300":"block","510_300":"block","330_420":"obst","360_420":"obst","300_450":"block","330_450":"block","360_450":"block","390_450":"block","510_330":"obst","600_300":"obst","600_270":"block","630_270":"block","660_270":"block","540_210":"obst","570_210":"obst","510_240":"obst","690_270":"block","720_270":"block","750_270":"block","780_300":"obst","780_330":"obst","780_360":"obst","780_270":"block"}
 
+$("#left, #right, #jump").click(restartGameIfNeeded);
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
 
@@ -31,13 +32,13 @@ fitToSize();
 startCreate();
 
 function startGame() {
-    
-//  create_blocks_from_json();
-//  addBlockHitbox(blocksCount);
-//  addObstacleHitbox(obstCount);
     if (!gameStarted) {
+        if (device == 'phone') {
+            $('#left').show();
+            $('#right').show();
+            $('#jump').show();
+        }
         $('.blockNet').remove();
-        console.log (gamemode);
         live = true;
         player.style.left = '30px';
         player.style.bottom = '330px';
@@ -50,10 +51,16 @@ function startGame() {
 }
 function restartGame() {
     document.removeEventListener('keydown', restartGame);
-    console.log('boo')
+    console.log('boo');
     $('#gameOver').hide();
     $('#PABTR').hide();
+    gameStarted = false;
     startGame();
+}
+function restartGameIfNeeded() {
+    if(live == false && gamemode == 'play') {
+        restartGame();
+    }
 }
 
 function getBottom(id) {
@@ -119,27 +126,18 @@ function addHitboxJquery() {
     });
     blocksCount = $('.block').length;
     obstCount = $('.obstacle').length;
-    console.log('blocks');
-    console.log(blocks);
-    console.log('obst');
-    console.log(obst);
+//    console.log(JSON.stringify('blocks - ' + blocks + '                  obstacles - ' + obst));
 }
 
 function KeyDown(e){
     buttons[e.which] = true;
-   console.log (buttons);
+//   console.log (buttons);
 }
 function KeyUp(e) {
+    if(buttons[e.which]) {
     buttons[e.which] = false;
-    console.log (buttons);
-}
-function KeyDownPhone(keyNumber){
-    buttons[keyNumber] = true;
-   console.log (buttons);
-}
-function KeyUpPhone(keyNumber) {
-    buttons[keyNumber] = false;
-    console.log (buttons);
+//    console.log (buttons);
+    }
 }
 
 function cycle() {
@@ -338,10 +336,16 @@ function playOrCreate () {
 
 
 function startCreate() {
-    load();
-    $('#clearAll').show()
+    document.removeEventListener('keydown', restartGame);
+    $('#gameOver').hide();
+    $('#PABTR').hide();
     player.style.left = '30px';
     player.style.bottom = '330px';
+    $('#left').hide();
+    $('#right').hide();
+    $('#jump').hide();
+    load();
+    $('#clearAll').show()
     console.log (gamemode);
     gameStarted = false;
     addNetBlocks();
@@ -477,6 +481,8 @@ function fitToSize() {
 }
 /*
 var name = prompt("Name");
-$("#save_button").click(onSave);
 $("#load_button").click(onLoad);
+//  addBlockHitbox(blocksCount);
+//  create_blocks_from_json();
+//  addObstacleHitbox(obstCount);
 */
