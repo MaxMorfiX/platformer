@@ -10,9 +10,9 @@ var blocksCount;
 var obstCount;
 var colId;
 const BTN_SPACE = 32;
-const BTN_UP = 38;
 const BTN_LEFT = 37;
 const BTN_RIGHT = 39;
+const BTN_UP = 38;
 const SEPARATOR = '_';
 var mapObj = {};
 var gameStarted = false;
@@ -20,13 +20,13 @@ var player = document.getElementById('player');
 var field = $("#field");
 var gamemode = 'create';
 var live = true;
-var phoneVer;
+var device;
 var startMap = {"0_300":"block","30_300":"block","60_300":"block","90_300":"block","120_240":"obst","150_240":"obst","180_240":"obst","210_300":"block","240_300":"block","270_300":"block","300_300":"block","330_330":"obst","360_330":"obst","330_300":"block","360_300":"block","390_300":"block","420_300":"block","450_300":"block","480_300":"block","510_300":"block","330_420":"obst","360_420":"obst","300_450":"block","330_450":"block","360_450":"block","390_450":"block","510_330":"obst","600_300":"obst","600_270":"block","630_270":"block","660_270":"block","540_210":"obst","570_210":"obst","510_240":"obst","690_270":"block","720_270":"block","750_270":"block","780_300":"obst","780_330":"obst","780_360":"obst","780_270":"block"}
 
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
 
-getOS();
+getDevice();
 fitToSize();
 startCreate();
 
@@ -127,11 +127,19 @@ function addHitboxJquery() {
 
 function KeyDown(e){
     buttons[e.which] = true;
-//   console.log (buttons);
+   console.log (buttons);
 }
 function KeyUp(e) {
     buttons[e.which] = false;
-//    console.log (buttons);
+    console.log (buttons);
+}
+function KeyDownPhone(keyNumber){
+    buttons[keyNumber] = true;
+   console.log (buttons);
+}
+function KeyUpPhone(keyNumber) {
+    buttons[keyNumber] = false;
+    console.log (buttons);
 }
 
 function cycle() {
@@ -421,7 +429,7 @@ function load() {
 
 
 
-function getOS() {
+function getDevice() {
     var userAgent = window.navigator.userAgent,
         platform = window.navigator?.userAgentData?.platform ?? window.navigator.platform,
         macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
@@ -437,11 +445,14 @@ function getOS() {
 }
 function fitToSize() {
     var y = Math.floor(window.innerHeight/blockSize) - 2;
-    var x = Math.floor(window.innerWidth/blockSize);
+    var x = Math.floor(window.innerWidth/blockSize) - 1;
     x = x * blockSize;
     y = y * blockSize;
     console.log(x + 'px and ' + y + 'px');
     $('#button').show();
+    $('#right').show();
+    $('#jump').show();
+    $('#left').show();
     $('#clearAll').show();
     $('#gameOver').show();
     $('#PABTR').show();
@@ -449,14 +460,16 @@ function fitToSize() {
     $('#field').css('display', 'block');
     $('#field').width(x);
     $('#field').height(y);
+    
+    $('#left').offset({left: 80, top: field.height() - 180});
+    $('#right').offset({left: 250, top: field.height() - 180});
+    $('#jump').offset({left: field.width() - 250, top: field.height() - 300});
     $('#button').offset({left: 10, top: $('#field').height() + 10});
     $('#clearAll').offset({left: field.width() - 150, top: $('#field').height() + 10});
-    $('#clearAll').left = field.width - 130;
-    $('#clearAll').bottom = -blockSize;
     
     
     
-    $('#gameOver').offset({left: window.innerWidth / 2 - 450, top: window.innerHeight / 2 - 135});
+    $('#gameOver').offset({left: field.width() / 2 - 450, top: field.height() / 2 - 135});
     $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
     
     $('#PABTR').hide();
