@@ -20,11 +20,13 @@ var player = document.getElementById('player');
 var field = $("#field");
 var gamemode = 'create';
 var live = true;
+var phoneVer;
 var startMap = {"0_300":"block","30_300":"block","60_300":"block","90_300":"block","120_240":"obst","150_240":"obst","180_240":"obst","210_300":"block","240_300":"block","270_300":"block","300_300":"block","330_330":"obst","360_330":"obst","330_300":"block","360_300":"block","390_300":"block","420_300":"block","450_300":"block","480_300":"block","510_300":"block","330_420":"obst","360_420":"obst","300_450":"block","330_450":"block","360_450":"block","390_450":"block","510_330":"obst","600_300":"obst","600_270":"block","630_270":"block","660_270":"block","540_210":"obst","570_210":"obst","510_240":"obst","690_270":"block","720_270":"block","750_270":"block","780_300":"obst","780_330":"obst","780_360":"obst","780_270":"block"}
 
 document.addEventListener('keydown', KeyDown);
 document.addEventListener('keyup', KeyUp);
 
+getOS();
 fitToSize();
 startCreate();
 
@@ -52,34 +54,6 @@ function restartGame() {
     $('#gameOver').hide();
     $('#PABTR').hide();
     startGame();
-}
-
-function fitToSize() {
-    var y = Math.floor(window.innerHeight/blockSize) - 2;
-    var x = Math.floor(window.innerWidth/blockSize);
-    x = x * blockSize;
-    y = y * blockSize;
-    console.log(x + 'px and ' + y + 'px');
-    $('#button').show();
-    $('#clearAll').show();
-    $('#gameOver').show();
-    $('#PABTR').show();
-    
-    $('#field').css('display', 'block');
-    $('#field').width(x);
-    $('#field').height(y);
-    $('#button').offset({left: 10, top: $('#field').height() + 10});
-    $('#clearAll').offset({left: field.width() - 150, top: $('#field').height() + 10});
-    $('#clearAll').left = field.width - 130;
-    $('#clearAll').bottom = -blockSize;
-    
-    
-    
-    $('#gameOver').offset({left: window.innerWidth / 2 - 450, top: window.innerHeight / 2 - 135});
-    $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
-    
-    $('#PABTR').hide();
-    $('#gameOver').hide();
 }
 
 function getBottom(id) {
@@ -445,6 +419,49 @@ function load() {
 
 
 
+
+
+function getOS() {
+    var userAgent = window.navigator.userAgent,
+        platform = window.navigator?.userAgentData?.platform ?? window.navigator.platform,
+        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+        
+        if(iosPlatforms.indexOf(platform) !== -1 || /Android/.test(userAgent)) {
+            device = 'phone';
+        } else {
+            device = 'pc';
+        }
+    console.log(device);
+}
+function fitToSize() {
+    var y = Math.floor(window.innerHeight/blockSize) - 2;
+    var x = Math.floor(window.innerWidth/blockSize);
+    x = x * blockSize;
+    y = y * blockSize;
+    console.log(x + 'px and ' + y + 'px');
+    $('#button').show();
+    $('#clearAll').show();
+    $('#gameOver').show();
+    $('#PABTR').show();
+    
+    $('#field').css('display', 'block');
+    $('#field').width(x);
+    $('#field').height(y);
+    $('#button').offset({left: 10, top: $('#field').height() + 10});
+    $('#clearAll').offset({left: field.width() - 150, top: $('#field').height() + 10});
+    $('#clearAll').left = field.width - 130;
+    $('#clearAll').bottom = -blockSize;
+    
+    
+    
+    $('#gameOver').offset({left: window.innerWidth / 2 - 450, top: window.innerHeight / 2 - 135});
+    $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
+    
+    $('#PABTR').hide();
+    $('#gameOver').hide();
+}
 /*
 var name = prompt("Name");
 $("#save_button").click(onSave);
