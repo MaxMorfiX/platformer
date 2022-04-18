@@ -400,7 +400,7 @@ function addNetBlocks() {
 
 }
 function clearAll() {
-    $('.block, .obstacle').remove();
+    $('.block, .obstacle, .end').remove();
     mapObj = {};
     save()
 }
