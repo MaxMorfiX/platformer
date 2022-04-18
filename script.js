@@ -54,8 +54,10 @@ function startGame() {
 function restartGame() {
     document.removeEventListener('keydown', restartGame);
     console.log('boo');
+    $('#LC').hide();
     $('#gameOver').hide();
     $('#PABTR').hide();
+    $('#greenPABTR').hide();
     gameStarted = false;
     startGame();
 }
@@ -196,14 +198,19 @@ function moveLeft() {
 
 function gameWinOrNot() {
     if(hitboxCheck('good')) {
-        alert('gamewiiiiiiin')
+        gameWin();
     }
+}
+function gameWin() {
+    live = false;
+    $('#LC').show();
+    $('#greenPABTR').show();
+    document.addEventListener('keydown', restartGame)
 }
 
 function liveOrDie() {
     if (hitboxCheck('bad')) {
         gameOver();
-        return true;
     }
 }
 function gameOver() {
@@ -488,14 +495,7 @@ function fitToSize() {
     x = x * blockSize;
     y = y * blockSize;
     console.log(x + 'px and ' + y + 'px');
-    $('#button').show();
-    $('#right').show();
-    $('#jump').show();
-    $('#left').show();
-    $('#clearAll').show();
-    $('#gameOver').show();
-    $('#LC').show();
-    $('#PABTR').show();
+    $('#button, #jump, #clearAll, #gameOver, #LC, .LRButtons, .PABTR').show();
     
     $('#field').css('display', 'block');
     $('#field').width(x);
@@ -511,11 +511,9 @@ function fitToSize() {
     
     $('#LC').offset({left: field.width() / 2 - 450, top: field.height() / 2 - 40});
     $('#gameOver').offset({left: field.width() / 2 - 450, top: field.height() / 2 - 135});
-    $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
+    $('.PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
     
-    $('#PABTR').hide();
-    $('#gameOver').hide();
-    $('#LC').hide();
+    $('.PABTR, #gameOver, #LC').hide();
 }
 /*
 var name = prompt("Name");
