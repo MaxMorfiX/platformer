@@ -5,9 +5,11 @@ var ysp = 0.00;
 var xsp = 5;
 var blocks = {};
 var obst = {};
+var end = {};
 var yp;
 var blocksCount;
 var obstCount;
+var endsCount;
 var colId;
 const BTN_SPACE = 32;
 const BTN_LEFT = 37;
@@ -106,26 +108,31 @@ function addFieldHitbox() {
 function addHitboxJquery() {
     var i_blocks = 1;
     var i_obst = 1;
-    $(".block, .obstacle").each(function() {
+    var i_ends = 1;
+    $(".block, .obstacle, .end").each(function() {
         var block = this;
         var currBlock = {};
         var x = block.offsetLeft;
         var y = getBottom(block.id);
-        currBlock['left'] = x - 1;
-        currBlock['right'] = x + blockSize + 1;
+        currBlock['left'] = x;
+        currBlock['right'] = x + blockSize;
         currBlock['top'] = y + blockSize;
         currBlock['bottom'] = y;
 
         if ($(this).hasClass('block')) {
             blocks[i_blocks] = currBlock;
             i_blocks++;
-        } else {
+        } else if($(this).hasClass('obstacle')) {
             obst[i_obst] = currBlock;
             i_obst++;
+        } else {
+            end[i_ends] = currBlock;
+            i_ends++;
         }
     });
     blocksCount = $('.block').length;
     obstCount = $('.obstacle').length;
+    endsCount = $('.end').length;
 //    console.log(JSON.stringify('blocks - ' + blocks + '                  obstacles - ' + obst));
 }
 
@@ -154,10 +161,10 @@ function cycle() {
     }
     
     yp = getBottom('player');
-//    console.log (yp + SEPARATOR + ysp);
     player.style.bottom = (yp + ysp + 'px');
     
     liveOrDie();
+    gameWinOrNot();
     
     if (gamemode == 'play') {
         if (live) {
@@ -186,6 +193,13 @@ function moveLeft() {
     var posLeft = player.offsetLeft;
     player.style.left = (posLeft - xsp) + "px";
 }
+
+function gameWinOrNot() {
+    if(hitboxCheck('good')) {
+        alert('gamewiiiiiiin')
+    }
+}
+
 function liveOrDie() {
     if (hitboxCheck('bad')) {
         gameOver();
@@ -297,6 +311,20 @@ function hitboxCheck (orientation) {
                 if (left < obst[i]['right'] - 1) {
                     if (top >= obst[i]['bottom'] + 1) {
                         if (bottom <= obst[i]['top'] - 1) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (orientation === 'good') {
+        for (i = 1; i <= endsCount; i++) {
+//            console.log ('check good' + i);
+            if (right > end[i]['left']) {
+                if (left < end[i]['right']) {
+                    if (top >= end[i]['bottom']) {
+                        if (bottom <= end[i]['top']) {
                             return true;
                         }
                     }
@@ -466,6 +494,7 @@ function fitToSize() {
     $('#left').show();
     $('#clearAll').show();
     $('#gameOver').show();
+    $('#LC').show();
     $('#PABTR').show();
     
     $('#field').css('display', 'block');
@@ -480,11 +509,13 @@ function fitToSize() {
     
     
     
+    $('#LC').offset({left: field.width() / 2 - 450, top: field.height() / 2 - 40});
     $('#gameOver').offset({left: field.width() / 2 - 450, top: field.height() / 2 - 135});
     $('#PABTR').offset({left: $('#gameOver').offset().left + 210, top: $('#gameOver').offset().top + 215});
     
     $('#PABTR').hide();
     $('#gameOver').hide();
+    $('#LC').hide();
 }
 /*
 var name = prompt("Name");

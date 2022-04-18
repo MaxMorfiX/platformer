@@ -120,3 +120,13 @@
     background: url('textures/jump.png');
     background-size: 100% 100%;
 }
+.levelCompleted {
+    position: absolute;
+    width: 900px;
+    height: 100px;
+    z-index: 6;
+    border: none;
+    background: url('textures/LC.png');
+    background-size: 100% 100%;
+    display: block;
+}
