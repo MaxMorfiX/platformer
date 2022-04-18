@@ -374,35 +374,38 @@ function createSomething(left, bottom) {
     if (type == 'empty') {
         mapObj[left + SEPARATOR + bottom] = 'block';
         $(`#obst${left}${SEPARATOR}${bottom}`).remove();
-        $(`#block${left}${SEPARATOR}${bottom}`).remove();
+        $(`#end${left}${SEPARATOR}${bottom}`).remove();
         createObject('block', left, bottom);
-        console.log ('block ' + left + ' ' + bottom);
-    }
-    if (type == 'block') {
+//        console.log ('block ' + left + ' ' + bottom);
+    } else if (type == 'block') {
         mapObj[left + SEPARATOR + bottom] = 'obst';
         $(`#block${left}${SEPARATOR}${bottom}`).remove();
-        $(`#obst${left}${SEPARATOR}${bottom}`).remove();
         createObject('obst', left, bottom);
-        console.log ('obst ' + left + ' ' + bottom);
-    }
-    if (type == 'obst') {
+//        console.log ('obst ' + left + ' ' + bottom);
+    } else if (type == 'obst') {
+        mapObj[left + SEPARATOR + bottom] = 'end';
+        $(`#obst${left}${SEPARATOR}${bottom}`).remove();
+        createObject('end', left, bottom);
+//        console.log ('end ' + left + ' ' + bottom);
+    } else if (type == 'end') {
         mapObj[left + SEPARATOR + bottom] = 'empty';
         $(`#block${left}${SEPARATOR}${bottom}`).remove();
         $(`#obst${left}${SEPARATOR}${bottom}`).remove();
-        console.log ('empty ' + left + ' ' + bottom);
+        $(`#end${left}${SEPARATOR}${bottom}`).remove();
+//        console.log ('empty ' + left + ' ' + bottom);
     }
     save();
 }
 function createObject(type, left, bottom) {
     if (type === 'block') {
         field.append(`<div id="block${left}${SEPARATOR}${bottom}" class="block" style="left: ${left}px; bottom: ${bottom}px">`);
-    }
-    if (type === 'obst') {
+    } else if (type === 'obst') {
         field.append(`<div id="obst${left}${SEPARATOR}${bottom}" class="obstacle" style="left: ${left}px; bottom: ${bottom}px">`);
-    }
-    if (type === 'net') {
+    } else if (type === 'net') {
         var html = `<div id="net${left}${SEPARATOR}${bottom}" onclick='createSomething(${left}, ${bottom})', class="blockNet" style="display: none; z-index: 5; left: ${left}px; bottom: ${bottom}px">`;
         field.append(html);
+    } else if (type === 'end') {
+        field.append(`<div id="end${left}${SEPARATOR}${bottom}" class="end" style="left: ${left}px; bottom: ${bottom}px">`);
     }
 }
 
