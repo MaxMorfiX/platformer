@@ -43,7 +43,7 @@ function startGame() {
         $('.blockNet').remove();
         live = true;
         player.style.left = '30px';
-        player.style.bottom = '330px';
+        player.style.bottom = '210px';
 //        console.log ('ggame start' + gamemode);
         addHitboxJquery();
         addFieldHitbox();
@@ -374,8 +374,10 @@ function startCreate() {
     document.removeEventListener('keydown', restartGame);
     $('#gameOver').hide();
     $('#PABTR').hide();
+    $('#LC').hide();
+    $('#greenPABTR').hide();
     player.style.left = '30px';
-    player.style.bottom = '330px';
+    player.style.bottom = '210px';
     $('#left').hide();
     $('#right').hide();
     $('#jump').hide();
@@ -414,19 +416,17 @@ function createSomething(left, bottom) {
 //        console.log ('block ' + left + ' ' + bottom);
     } else if (type == 'block') {
         mapObj[left + SEPARATOR + bottom] = 'obst';
-        $(`#block${left}${SEPARATOR}${bottom}`).remove();
+        $(`#block${left}${SEPARATOR}${bottom}, #obst${left}${SEPARATOR}${bottom}, #end${left}${SEPARATOR}${bottom}`).remove();
         createObject('obst', left, bottom);
 //        console.log ('obst ' + left + ' ' + bottom);
     } else if (type == 'obst') {
         mapObj[left + SEPARATOR + bottom] = 'end';
-        $(`#obst${left}${SEPARATOR}${bottom}`).remove();
+        $(`#block${left}${SEPARATOR}${bottom}, #obst${left}${SEPARATOR}${bottom}, #end${left}${SEPARATOR}${bottom}`).remove();
         createObject('end', left, bottom);
 //        console.log ('end ' + left + ' ' + bottom);
     } else if (type == 'end') {
         mapObj[left + SEPARATOR + bottom] = 'empty';
-        $(`#block${left}${SEPARATOR}${bottom}`).remove();
-        $(`#obst${left}${SEPARATOR}${bottom}`).remove();
-        $(`#end${left}${SEPARATOR}${bottom}`).remove();
+        $(`#block${left}${SEPARATOR}${bottom}, #obst${left}${SEPARATOR}${bottom}, #end${left}${SEPARATOR}${bottom}`).remove();
 //        console.log ('empty ' + left + ' ' + bottom);
     }
     save();
