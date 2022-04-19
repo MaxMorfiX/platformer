@@ -1,5 +1,5 @@
 var buttons = {};
-var gamespeed = 10;
+var gamespeed = 15;
 var blockSize = 30;
 var ysp = 0.00;
 var xsp = 5;
@@ -23,7 +23,7 @@ var field = $("#field");
 var gamemode = 'create';
 var live = true;
 var device;
-var startMap = {"0_300":"block","30_300":"block","60_300":"block","90_300":"block","120_240":"obst","150_240":"obst","180_240":"obst","210_300":"block","240_300":"block","270_300":"block","300_300":"block","330_330":"obst","360_330":"obst","330_300":"block","360_300":"block","390_300":"block","420_300":"block","450_300":"block","480_300":"block","510_300":"block","330_420":"obst","360_420":"obst","300_450":"block","330_450":"block","360_450":"block","390_450":"block","510_330":"obst","600_300":"obst","600_270":"block","630_270":"block","660_270":"block","540_210":"obst","570_210":"obst","510_240":"obst","690_270":"block","720_270":"block","750_270":"block","780_300":"obst","780_330":"obst","780_360":"obst","780_270":"block"}
+var startMap = {"0_300":"block","30_300":"block","60_300":"block","90_330":"block","120_330":"block","0_180":"block","30_180":"block","90_180":"block","60_180":"block","90_210":"obst","120_210":"obst","120_180":"block","150_180":"block","90_300":"obst","120_300":"obst","60_330":"block","150_330":"block","240_90":"block","210_150":"block","270_120":"block","210_90":"block","180_90":"block","150_90":"block","120_90":"obst","90_90":"obst","60_90":"block","180_300":"block","300_150":"block","300_180":"block","300_210":"block","300_240":"block","120_360":"block","90_360":"block","0_330":"end","300_390":"obst","30_90":"block","0_90":"block","0_120":"end","270_210":"block","330_270":"block","330_240":"block","90_390":"obst","60_390":"obst","60_360":"block","150_300":"block","360_270":"block","360_300":"block","180_150":"block","360_330":"block","360_360":"block","360_390":"block","330_390":"obst","210_300":"block","240_300":"block"}
 
 $("#left, #right, #jump").click(restartGameIfNeeded);
 document.addEventListener('keydown', KeyDown);
@@ -410,8 +410,7 @@ function createSomething(left, bottom) {
     var type = mapObj[left + SEPARATOR + bottom] ? mapObj[left + SEPARATOR + bottom] : 'empty';
     if (type == 'empty') {
         mapObj[left + SEPARATOR + bottom] = 'block';
-        $(`#obst${left}${SEPARATOR}${bottom}`).remove();
-        $(`#end${left}${SEPARATOR}${bottom}`).remove();
+        $(`#block${left}${SEPARATOR}${bottom}, #obst${left}${SEPARATOR}${bottom}, #end${left}${SEPARATOR}${bottom}`).remove();
         createObject('block', left, bottom);
 //        console.log ('block ' + left + ' ' + bottom);
     } else if (type == 'block') {
