@@ -467,6 +467,7 @@ function load() {
             mapObj[parts[0] + SEPARATOR + parts[1]] = startMap[key];
             createObject(startMap[key], parts[0], parts[1]);
         }
+        save();
     }
 }
 
