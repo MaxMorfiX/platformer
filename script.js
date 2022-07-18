@@ -53,7 +53,6 @@ function startGame() {
 }
 function restartGame() {
     document.removeEventListener('keydown', restartGame);
-    console.log('boo');
     $('#LC').hide();
     $('#gameOver').hide();
     $('#PABTR').hide();
@@ -115,7 +114,7 @@ function addHitboxJquery() {
         var block = this;
         var currBlock = {};
         var x = block.offsetLeft;
-        var y = getBottom(block.id);
+        var y = $(block).bottom();
         currBlock['left'] = x;
         currBlock['right'] = x + blockSize;
         currBlock['top'] = y + blockSize;
@@ -140,7 +139,7 @@ function addHitboxJquery() {
 
 function KeyDown(e){
     buttons[e.which] = true;
-//   console.log (buttons);
+   console.log (buttons);
 }
 function KeyUp(e) {
     if(buttons[e.which]) {
@@ -165,10 +164,10 @@ function cycle() {
     yp = getBottom('player');
     player.style.bottom = (yp + ysp + 'px');
     
-    liveOrDie();
     gameWinOrNot();
+    liveOrDie();
     
-    if (gamemode == 'play') {
+    if (gamemode === 'play') {
         if (live) {
             setTimeout (cycle, gamespeed);
         } else {
