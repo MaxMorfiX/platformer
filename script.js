@@ -149,6 +149,7 @@ function KeyUp(e) {
 }
 
 function cycle() {
+    liveOrDie();
     var isAtBottom = handleY();
     if (isAtBottom && buttons[BTN_UP]) {
         ysp = 7;
@@ -165,7 +166,6 @@ function cycle() {
     player.style.bottom = (yp + ysp + 'px');
     
     gameWinOrNot();
-    liveOrDie();
     
     if (gamemode === 'play') {
         if (live) {
@@ -493,7 +493,7 @@ function fitToSize() {
     var x = Math.floor(window.innerWidth/blockSize) - 1;
     x = x * blockSize;
     y = y * blockSize;
-    console.log(x + 'px and ' + y + 'px');
+    console.log(x + 'px by ' + y + 'px');
     $('#button, #jump, #clearAll, #gameOver, #LC, .LRButtons, .PABTR').show();
     
     $('#field').css('display', 'block');
@@ -506,6 +506,8 @@ function fitToSize() {
     $('#button').offset({left: 10, top: $('#field').height() + 10});
     $('#clearAll').offset({left: field.width() - 150, top: $('#field').height() + 10});
     
+    $('#guideButton').offset({left: 15 + 90, top: field.height() + 10});
+    
     
     
     $('#LC').offset({left: field.width() / 2 - 450, top: field.height() / 2 - 40});
@@ -514,6 +516,25 @@ function fitToSize() {
     
     $('.PABTR, #gameOver, #LC').hide();
 }
+
+
+
+
+
+
+
+function alertGuide() {
+    alert('to play, click "play" button, to create - "create"\n\
+        controlling is by arrows\n\
+        in redactor click on one of the cell to place a block\n\
+        2nd click to place an obstacle\n\
+        3rd click to place a finish\n\
+        4th click to place air');
+}
+
+
+
+
 /*
 var name = prompt("Name");
 $("#load_button").click(onLoad);

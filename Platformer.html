@@ -13,8 +13,9 @@
             <div id="PABTR" class="PABTR" style="left: 255px; top: 350px"></div>
             <div id="greenPABTR" class="PABTR" style="left: 255px; top: 350px; background: url('textures/GreenPABTR.png'); 
     background-size: 100% 100%;"></div>
-            <div id='button' class='button' onclick='playOrCreate();'></div>
+            <div id='button' class='button' style='display: inline-block' onclick='playOrCreate();'></div>
             <div id='clearAll' class='clearAll' onclick='clearAll();'></div>
+            <div id='guideButton' class='button' style='background-image: none; background-color: gray; display: block; color: white; font-size: 25px;' onclick='alertGuide();'>guide</div>
             
             <div id='left' class='LRButtons' ontouchstart='buttons[37] = true;' ontouchend='buttons[37] = false;' style='background: url("textures/left.png")'></div>
             <div id='right' class='LRButtons' ontouchstart='buttons[39] = true;' ontouchend='buttons[39] = false;' style='background: url("textures/right.png")'></div>
